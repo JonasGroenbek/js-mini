@@ -1,10 +1,10 @@
 {
-  "name": "express-typescript-starter",
+  "name": "express-node-ts",
   "version": "0.1.0",
-  "description": "A starting point for Node.js express apps with TypeScript",
+  "description": "An adapted starting point for Node.js express apps with TypeScript",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Microsoft/TypeScript-Node-Starter"
+    "url": "https://github.com/Thomas-Rosenkrans-Vestergaard/express-node-ts"
   },
   "author": "Bowden Kelly",
   "license": "MIT",
