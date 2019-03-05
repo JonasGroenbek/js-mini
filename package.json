@@ -75,6 +75,7 @@
     "@types/shelljs": "^0.7.9",
     "@types/supertest": "^2.0.7",
     "@types/winston": "^2.4.4",
+    "@types/mocha": "5.2.6",
     "chai": "^4.2.0",
     "concurrently": "^3.6.1",
     "jest": "^24.1.0",
