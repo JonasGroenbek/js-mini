@@ -1,22 +1,14 @@
+import "./util/secrets";
 import errorHandler from "errorhandler";
-
 import app from "./app";
 
-/**
- * Error Handler. Provides full stack - remove for production
- */
 app.use(errorHandler());
 
-/**
- * Start Express server.
- */
-const server = app.listen(app.get("port"), () => {
-  console.log(
-    "  App is running at http://localhost:%d in %s mode",
-    app.get("port"),
-    app.get("env")
-  );
-  console.log("  Press CTRL-C to stop\n");
+const port = app.get("port");
+const env = app.get("env");
+const server = app.listen(port, () => {
+  console.log(`Running at http://localhost:${port} as ${env}`);
+  console.log("Press CTRL-C to stop\n");
 });
 
 export default server;

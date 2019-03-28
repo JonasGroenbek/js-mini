@@ -1,22 +1,26 @@
 import logger from "./logger";
-import dotenv from "dotenv";
 import fs from "fs";
+import dotenv from "dotenv";
 
-logger.debug("Using project.env file to supply config environment variables");
-dotenv.config({ path: "project.env" });
+export const environment = process.env.NODE_ENV;
+const config = new Map<String, String>();
+const loaded = dotenv.config();
 
-export const ENVIRONMENT = process.env.NODE_ENV;
-const prod = ENVIRONMENT === "production"; // Anything else is treated as 'dev'
-
-export const SESSION_SECRET = process.env["SESSION_SECRET"];
-export const MONGODB_URI = prod ? process.env["MONGODB_URI"] : process.env["MONGODB_URI_LOCAL"];
-
-if (!SESSION_SECRET) {
-    logger.error("No client secret. Set SESSION_SECRET environment variable.");
-    process.exit(1);
+// An error occurred while reading configuration file.
+if (loaded.error) {
+    logger.error("There was an error while parsing the .env file.");
+    logger.error(loaded.error.message)
+    process.exit(1)
 }
 
-if (!MONGODB_URI) {
-    logger.error("No mongo connection string. Set MONGODB_URI environment variable.");
-    process.exit(1);
+// Load configuration key-value pairs.
+if (loaded.parsed) {
+    const keys = Object.keys(loaded.parsed);
+    logger.info("Using .env file to supply configuration values.");
+    logger.info(`Found ${keys.length} configuration pairs.`);
+    keys.forEach(key => {
+        config.set(key, loaded.parsed[key]);
+    });
 }
+
+export default config;
