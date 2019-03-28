@@ -1,6 +1,6 @@
-const bcrypt = require('bcrypt')
+/*const bcrypt = require('bcrypt')
 const { Schema, model } = require('mongoose')
-const {LocationSchema} = require('./Location') 
+const {LocationSchema} = require('./Location')
 
 const UserSchema = new Schema({
     email: { type: String, unique: true, required: true },
@@ -34,4 +34,4 @@ schema.statics.register = function (email, password, cb) {
 }
 
 const User = model('User', schema)
-module.exports = User
+module.exports = User*/

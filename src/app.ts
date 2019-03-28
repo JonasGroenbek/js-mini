@@ -14,7 +14,7 @@ import router from "./controllers/router";
 
 const app = express();
 
-app.set("port", process.env.PORT || 3000);
+app.set("port", config.getOrDefault("PORT", 3000));
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "hbs");
 app.engine("hbs", hbs({
