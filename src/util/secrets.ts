@@ -69,10 +69,10 @@ class Configuration {
     }
 
     getOrDefault<T>(key: string, defaultValue: T): string | T {
-        if (!Configuration.has(key))
+        if (!configuration.has(key))
             return defaultValue;
 
-        return Configuration.get(key);
+        return configuration.get(key);
     }
 
     getOrThrow(key: string): string {

@@ -2,7 +2,7 @@ import logger from "./logger";
 import config from "./secrets";
 import mongoose from "mongoose";
 
-export default function connect(done: (err: Error) => any) {
+export default function connect(done?: (err: Error) => any) {
 
     const url = config.getOrThrow("MONGO_URL");
     const options = {createIndexes: true, useNewUrlParser: true};
@@ -11,11 +11,13 @@ export default function connect(done: (err: Error) => any) {
         if (err) {
             logger.error("Could not connect to MongoDB:");
             logger.error(err.message);
-            done(err);
+            if (done != undefined)
+                done(err);
             return;
         }
 
         logger.info("Successfully connected to MongoDB.");
-        done(undefined);
+        if (done != undefined)
+            done(undefined);
     });
 }

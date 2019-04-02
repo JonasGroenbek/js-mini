@@ -3,7 +3,7 @@ import {Request, Response} from "express";
 import {ApplicationError} from "../errors/error";
 import _ from "lodash";
 
-export type JwtAuthenticateOptions = {
+export type JwtAuthorizationOptions = {
 
     /**
      * The name of the http header the jwt is stored within.
@@ -27,8 +27,8 @@ export class AuthorizationError extends ApplicationError {
     }
 }
 
-export function jwtAuthenticate(jwtConfiguration: JwtConfiguration, authenticateOptions: JwtAuthenticateOptions) {
-    const defaults: JwtAuthenticateOptions = {header: "Authorization", destination: "auth", prefix: "Bearer"};
+export function jwtAuthenticate(jwtConfiguration: JwtConfiguration, authenticateOptions: JwtAuthorizationOptions) {
+    const defaults: JwtAuthorizationOptions = {header: "Authorization", destination: "auth", prefix: "Bearer"};
     authenticateOptions = Object.assign(defaults, authenticateOptions);
 
     // The function that handles the authentication.
@@ -41,10 +41,8 @@ export function jwtAuthenticate(jwtConfiguration: JwtConfiguration, authenticate
             return;
         }
 
-        // remove prefix
-        header = _.trimStart(header, authenticateOptions.prefix);
-
         try {
+            header = _.trimStart(header, authenticateOptions.prefix);
             const jwtInstance = jwt(jwtConfiguration);
             // @ts-ignore
             req[authenticateOptions.destination] = await jwtInstance.verify(header);

@@ -1,6 +1,6 @@
 import AuthenticatableUser from "./AuthenticatableUser";
-import {Repository} from "./authentication";
-import mongoose, {Model, Document} from "mongoose";
+import {DuplicateUserIdentifier, Repository} from "./authentication";
+import {Model, Document} from "mongoose";
 
 export type UserFactory = (input: {}) => {};
 export const defaultUserFactory: UserFactory = e => e;
@@ -30,10 +30,14 @@ export default class MongoRepository<T extends AuthenticatableUser & Document> i
     }
 
     async getByIdentifier(identifier: string): Promise<T> {
-        return this.userModel.findOne({identifierKey: identifier}).exec();
+        return this.userModel.findOne({[this.identifierKey]: identifier}).exec();
     }
 
     async create(identifier: string, password: string): Promise<T> {
+        const found = await this.getByIdentifier(identifier);
+        if (found)
+            throw new DuplicateUserIdentifier(identifier);
+
         const factoryResult = this.userFactory({[this.identifierKey]: identifier, [this.passwordKey]: password});
         return this.userModel.create(factoryResult);
     }

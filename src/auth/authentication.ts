@@ -2,6 +2,12 @@ import bcrypt from "bcrypt";
 import AuthenticatableUser from "./AuthenticatableUser";
 import {ApplicationError} from "../errors/error";
 
+export class AuthenticationError extends ApplicationError {
+    constructor(message: string, cause?: Error) {
+        super(message, 401, cause);
+    }
+}
+
 export interface Repository<T extends AuthenticatableUser> {
 
     /**
@@ -18,7 +24,13 @@ export interface Repository<T extends AuthenticatableUser> {
     create(identifier: string, password: string): Promise<T>;
 }
 
-export default function create<T extends AuthenticatableUser>(repository: Repository<T>) {
+export default class AuthenticationProvider<T extends AuthenticatableUser> {
+
+    private repository: Repository<T>;
+
+    constructor(repository: Repository<T>) {
+        this.repository = repository;
+    }
 
     /**
      * Attempts to authenticate the user with the provided email and password.
@@ -26,11 +38,18 @@ export default function create<T extends AuthenticatableUser>(repository: Reposi
      * @param password The password to use to authenticate.
      * @returns The found user when authentication succeeds, <code>null</code> when it fails.
      */
-    async function authenticate(identifier: string, password: string) {
+    async authenticate(identifier: string, password: string) {
 
-        const found = await repository.getByIdentifier(identifier);
-        const verified = await bcrypt.compare(found.authenticationPassword(), password);
-        return verified ? found : undefined;
+        const error = new AuthenticationError("Could not authenticate user.");
+        const found = await this.repository.getByIdentifier(identifier);
+        if (found == undefined)
+            throw error;
+
+        const verified = await bcrypt.compare(password, found.authenticationPassword());
+        if (!verified)
+            throw error;
+        else
+            return found;
     }
 
     /**
@@ -39,20 +58,18 @@ export default function create<T extends AuthenticatableUser>(repository: Reposi
      * @param password The password of the account to create.
      * @returns The newly created user when the registration succeeds, <code>null</code> when it fails.
      */
-    async function register(identifier: string, password: string): Promise<T> {
+    async register(identifier: string, password: string): Promise<T> {
 
-        const found = await repository.getByIdentifier(identifier);
-        if (found)
+        const found = await this.repository.getByIdentifier(identifier);
+        if (found != undefined)
             throw new DuplicateUserIdentifier(identifier);
 
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(password, salt);
-        const user = await repository.create(identifier, hash);
+        const user = await this.repository.create(identifier, hash);
 
         return user;
     }
-
-    return {authenticate, register};
 }
 
 export class DuplicateUserIdentifier extends ApplicationError {

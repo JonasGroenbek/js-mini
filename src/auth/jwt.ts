@@ -22,8 +22,8 @@ export type JwtConfiguration = {
  * Fulfils the GetSecret interface, by returning a value from the configuration file.
  * @param key The key the secret is stored under.
  */
-export function getSecretFromConfig(key: string): Promise<String> {
-    return new Promise((resolve, reject) => {
+export function getSecretFromConfig(key: string): () => Promise<string> {
+    return () => new Promise((resolve, reject) => {
         try {
             resolve(secrets.getOrThrow(key));
         } catch (e) {
@@ -47,11 +47,13 @@ export default function config(configuration: JwtConfiguration) {
      * @param extras The extra information to encode. Is included in the jwt.
      * @returns A promise resolving to the generated token.
      */
-    async function encode(user: AuthenticatableUser, extras: {}) {
+    async function encode(user: AuthenticatableUser, extras: {} = {}) {
         const payload = Object.assign({user}, extras);
         const secret = await configuration.getSecret();
 
-        return jwt.sign(payload, secret, configuration);
+        return await jwt.sign(payload, secret, {
+            algorithm: configuration.algorithm
+        });
     }
 
     /**
