@@ -17,7 +17,7 @@ function load(file: string) {
         const content = fs.readFileSync(file).toString();
         const parsed = parse(content);
         logger.info(`Parsed ${parsed.size} configuration value(s) from ${file}`);
-        for (let key of parsed.keys()) {
+        for (const key of parsed.keys()) {
             // @ts-ignore
             configuration.set(key, parsed.get(key));
         }
@@ -56,26 +56,26 @@ class Configuration {
      * Checks if the configuration entries has a key with the provided name.
      * @param key The key to check for.
      */
-    has(key: string): boolean {
+    static has(key: string): boolean {
         return configuration.has(key);
     }
 
-    get(key: string): string | undefined {
+    static get(key: string): string | undefined {
         return configuration.get(key);
     }
 
-    entries(): IterableIterator<[string, string]> {
+    static entries(): IterableIterator<[string, string]> {
         return configuration.entries();
     }
 
-    getOrDefault<T>(key: string, defaultValue: T): string | T {
-        if (!this.has(key))
+    static getOrDefault<T>(key: string, defaultValue: T): string | T {
+        if (!Configuration.has(key))
             return defaultValue;
 
-        return this.get(key);
+        return Configuration.get(key);
     }
 
-    getOrThrow(key: string): string {
+    static getOrThrow(key: string): string {
         const found = configuration.get(key);
         if (found == undefined)
             throw new Error(`Missing configuration key ${key}`);
@@ -92,8 +92,8 @@ class Configuration {
         });
     }
 
-    readonly size: number;
+    readonly size: number = configuration.size;
 }
 
-export { environment }
+export {environment};
 export default new Configuration();
