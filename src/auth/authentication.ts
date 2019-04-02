@@ -40,6 +40,8 @@ export default class AuthenticationProvider<T extends AuthenticatableUser> {
      */
     async authenticate(identifier: string, password: string) {
 
+        throw new ApplicationError("You bitch", 500, new Error("cause"));
+
         const error = new AuthenticationError("Could not authenticate user.");
         const found = await this.repository.getByIdentifier(identifier);
         if (found == undefined)

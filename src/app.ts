@@ -9,6 +9,7 @@ import expressValidator from "express-validator";
 import hbs from "express-handlebars";
 import router from "./controllers/router";
 import mongooseConnect from "./util/mongooseConnect";
+import auto from "./errors/restErrors";
 
 const app = express();
 mongooseConnect();
@@ -34,5 +35,6 @@ app.use(
 );
 
 app.use(router);
+app.use(auto());
 
 export default app;

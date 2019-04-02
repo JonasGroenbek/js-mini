@@ -1,13 +1,32 @@
-export class ApplicationError extends Error {
+import stacktrace, {StackFrame} from "stack-trace";
 
-    public message: string;
-    public status: number;
-    public cause: Error;
+export interface ApplicationError {
 
-    constructor(message: string, status: number, cause: Error) {
-        super(message);
-        this.status = status;
+    readonly message: string;
+    readonly status: number;
+    readonly cause: Error;
+    readonly stack?: StackFrame[];
+}
+
+type Constructable<T> = {new(): T};
+
+function a<T extends ApplicationError>(c: Constructable<T>) {
+    return new c();
+}
+
+
+export class ApplicationErrorBase implements ApplicationError {
+
+    readonly message: string;
+    readonly status: number;
+    readonly cause: Error;
+    readonly stack?: StackFrame[];
+
+    constructor(message: string, status: number, cause: Error, stack?: StackFrame[]) {
         this.cause = cause;
+        this.message = message;
+        this.stack = stack;
+        this.status = status;
     }
 }
 
@@ -43,4 +62,7 @@ export class Builder {
 
 export default function error(message: string) {
     return new Builder().message(message);
-}
+
+
+
+    a<ApplicationErrorBase>(ApplicationErrorBase::new);}

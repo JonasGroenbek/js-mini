@@ -34,19 +34,27 @@ export function rest<T extends AuthenticatableUser>(configuration: RestAuthentic
     const router = express.Router();
 
     async function restAuthentication(req: Request, res: Response, next: (err: Error) => void) {
-        const identifier = req.body[configuration.identifierKey];
-        const password = req.body[configuration.passwordKey];
-        const user = await configuration.authenticationProvider.authenticate(identifier, password);
-        const token = await jwt(configuration.jwtConfiguration).encode(user);
-        configuration.renderer(req, res, next, token, user);
+        try {
+            const identifier = req.body[configuration.identifierKey];
+            const password = req.body[configuration.passwordKey];
+            const user = await configuration.authenticationProvider.authenticate(identifier, password);
+            const token = await jwt(configuration.jwtConfiguration).encode(user);
+            configuration.renderer(req, res, next, token, user);
+        } catch (e) {
+            next(e);
+        }
     }
 
     async function restRegistration(req: Request, res: Response, next: (err: Error) => void) {
-        const identifier = req.body[configuration.identifierKey];
-        const password = req.body[configuration.passwordKey];
-        const user = await configuration.authenticationProvider.register(identifier, password);
-        const token = await jwt(configuration.jwtConfiguration).encode(user);
-        configuration.renderer(req, res, next, token, user);
+        try {
+            const identifier = req.body[configuration.identifierKey];
+            const password = req.body[configuration.passwordKey];
+            const user = await configuration.authenticationProvider.register(identifier, password);
+            const token = await jwt(configuration.jwtConfiguration).encode(user);
+            configuration.renderer(req, res, next, token, user);
+        } catch (e) {
+            next(e);
+        }
     }
 
     router.post(configuration.authenticationUrl, restAuthentication);
