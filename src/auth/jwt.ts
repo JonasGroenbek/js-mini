@@ -5,7 +5,18 @@ import secrets from "../util/secrets";
 /**
  * The function that returns the jwt secret.
  */
-export type GetSecret = () => Promise<string>;
+export type JwtConfiguration = {
+
+    /**
+     * The algorithm to use to create jwt.
+     */
+    algorithm?: string,
+
+    /**
+     * A function that returns the secret to sign the jwt with.
+     */
+    getSecret: () => Promise<string>,
+};
 
 /**
  * Fulfils the GetSecret interface, by returning a value from the configuration file.
@@ -23,10 +34,12 @@ export function getSecretFromConfig(key: string): Promise<String> {
 
 /**
  * Creates a new jwt module, configured using the provided algorithm and secret provider.
- * @param algorithm
- * @param getSecret
+ * @param configuration The configuration to use when signing and verifying jwt.
  */
-export default function config(algorithm: string = "HS512", getSecret: GetSecret) {
+export default function config(configuration: JwtConfiguration) {
+
+    const defaults = {algorithm: "HS256"};
+    configuration = Object.assign(defaults, configuration);
 
     /**
      * Encodes the provided user and extra information into a jwt.
@@ -36,10 +49,9 @@ export default function config(algorithm: string = "HS512", getSecret: GetSecret
      */
     async function encode(user: AuthenticatableUser, extras: {}) {
         const payload = Object.assign({user}, extras);
-        const secret = await getSecret();
-        const options = {algorithm};
+        const secret = await configuration.getSecret();
 
-        return jwt.sign(payload, secret, options);
+        return jwt.sign(payload, secret, configuration);
     }
 
     /**
@@ -48,8 +60,8 @@ export default function config(algorithm: string = "HS512", getSecret: GetSecret
      * @returns A promise resolving to the decoded token contents.
      */
     async function verify(token: string) {
-        const secret = await getSecret();
-        const options = {algorithms: [algorithm]};
+        const secret = await configuration.getSecret();
+        const options = {algorithms: [configuration.algorithm]};
 
         return jwt.verify(token, secret, options);
     }

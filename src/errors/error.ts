@@ -32,12 +32,12 @@ export class Builder {
         return this;
     }
 
-    build() {
-        return new ApplicationError(this._message, this._status, this._cause)
+    build(type = ApplicationError) {
+        return new (type)(this._message, this._status, this._cause);
     }
 
     throw() {
-        throw this.build()
+        throw this.build();
     }
 }
 

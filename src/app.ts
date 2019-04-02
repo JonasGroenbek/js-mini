@@ -4,11 +4,8 @@ import express from "express";
 import compression from "compression";
 import bodyParser from "body-parser";
 import lusca from "lusca";
-import mongo from "connect-mongo";
 import path from "path";
-import mongoose from "mongoose";
 import expressValidator from "express-validator";
-import bluebird from "bluebird";
 import hbs from "express-handlebars";
 import router from "./controllers/router";
 

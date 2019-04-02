@@ -56,26 +56,26 @@ class Configuration {
      * Checks if the configuration entries has a key with the provided name.
      * @param key The key to check for.
      */
-    static has(key: string): boolean {
+    has(key: string): boolean {
         return configuration.has(key);
     }
 
-    static get(key: string): string | undefined {
+    get(key: string): string | undefined {
         return configuration.get(key);
     }
 
-    static entries(): IterableIterator<[string, string]> {
+    entries(): IterableIterator<[string, string]> {
         return configuration.entries();
     }
 
-    static getOrDefault<T>(key: string, defaultValue: T): string | T {
+    getOrDefault<T>(key: string, defaultValue: T): string | T {
         if (!Configuration.has(key))
             return defaultValue;
 
         return Configuration.get(key);
     }
 
-    static getOrThrow(key: string): string {
+    getOrThrow(key: string): string {
         const found = configuration.get(key);
         if (found == undefined)
             throw new Error(`Missing configuration key ${key}`);

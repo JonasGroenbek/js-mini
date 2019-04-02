@@ -1,5 +1,4 @@
-export default interface AuthenticateableUser {
-    authenticationIdentifierKey(): string;
+export default interface AuthenticatableUser {
     authenticationIdentifier(): string;
     authenticationPassword(): string;
 }
