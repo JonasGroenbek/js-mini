@@ -2,7 +2,7 @@ import logger from "./logger";
 import config from "./secrets";
 import mongoose from "mongoose";
 
-export default function connect(done?: (err: Error) => any) {
+export default function connect(done?: (err: Error | undefined) => any) {
 
     const url = config.getOrThrow("MONGO_URL");
     const options = {createIndexes: true, useNewUrlParser: true};

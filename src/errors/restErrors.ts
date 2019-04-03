@@ -11,8 +11,10 @@ export default function auto(renderer: Renderer = jsonRenderer) {
     switch (process.env.NODE_ENV) {
         case "production":
             return production(renderer);
-        default:
+        case "development":
             return development(renderer);
+        default:
+            throw new Error("No error handler for environment " + process.env.NODE_ENV);
     }
 }
 

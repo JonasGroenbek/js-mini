@@ -1,11 +1,12 @@
 import AuthenticatableUser from "./AuthenticatableUser";
-import {DuplicateUserIdentifier, Repository} from "./authentication";
+import {DuplicateUserIdentifier, AuthenticationRepository} from "./authentication";
 import {Model, Document} from "mongoose";
 
 export type UserFactory = (input: {}) => {};
 export const defaultUserFactory: UserFactory = e => e;
 
-export default class MongoRepository<T extends AuthenticatableUser & Document> implements Repository<T> {
+export default class MongoAuthenticationRepository<T extends AuthenticatableUser & Document>
+    implements AuthenticationRepository<T> {
 
     /**
      * The user module to retrieve from.
@@ -16,11 +17,11 @@ export default class MongoRepository<T extends AuthenticatableUser & Document> i
     private readonly userFactory: UserFactory;
 
     /**
-     * Creates a new MongoRepository.
+     * Creates a new MongoAuthenticationRepository.
      * @param userModel The module to retrieve users from.
      * @param identifierKey The name of the key on the model, the contains the identifier.
      * @param passwordKey The name of the key on the model, that contains the password.
-     * @param userFactory Callback that can affect the user before creation.
+     * @param userFactory A callback that can affect the user object before creation.
      */
     constructor(userModel: Model<T>, identifierKey: string = "email", passwordKey: string = "password", userFactory = defaultUserFactory) {
         this.userModel = userModel;
@@ -29,14 +30,23 @@ export default class MongoRepository<T extends AuthenticatableUser & Document> i
         this.userFactory = userFactory;
     }
 
+    /**
+     * Finds the user with the provided identifier.
+     * @param identifier The identifier.
+     */
     async getByIdentifier(identifier: string): Promise<T> {
         return this.userModel.findOne({[this.identifierKey]: identifier}).exec();
     }
 
+    /**
+     * Creates a new user using the provided identifier and password.
+     * @param identifier
+     * @param password
+     */
     async create(identifier: string, password: string): Promise<T> {
         const found = await this.getByIdentifier(identifier);
         if (found)
-            throw new DuplicateUserIdentifier(identifier);
+            return Promise.reject(new DuplicateUserIdentifier(identifier));
 
         const factoryResult = this.userFactory({[this.identifierKey]: identifier, [this.passwordKey]: password});
         return this.userModel.create(factoryResult);

@@ -1,14 +1,9 @@
 import bcrypt from "bcrypt";
 import AuthenticatableUser from "./AuthenticatableUser";
-import {ApplicationError} from "../errors/error";
+import {ApplicationError, ApplicationErrorBase} from "../errors/error";
+import {StackFrame} from "stack-trace";
 
-export class AuthenticationError extends ApplicationError {
-    constructor(message: string, cause?: Error) {
-        super(message, 401, cause);
-    }
-}
-
-export interface Repository<T extends AuthenticatableUser> {
+export interface AuthenticationRepository<T extends AuthenticatableUser> {
 
     /**
      * Returns the authenticatable user with the provided identifier.
@@ -24,13 +19,7 @@ export interface Repository<T extends AuthenticatableUser> {
     create(identifier: string, password: string): Promise<T>;
 }
 
-export default class AuthenticationProvider<T extends AuthenticatableUser> {
-
-    private repository: Repository<T>;
-
-    constructor(repository: Repository<T>) {
-        this.repository = repository;
-    }
+export interface AuthenticationProvider<T extends AuthenticatableUser> {
 
     /**
      * Attempts to authenticate the user with the provided email and password.
@@ -38,20 +27,57 @@ export default class AuthenticationProvider<T extends AuthenticatableUser> {
      * @param password The password to use to authenticate.
      * @returns The found user when authentication succeeds, <code>null</code> when it fails.
      */
-    async authenticate(identifier: string, password: string) {
+    authenticate(identifier: string, password: string): Promise<T>;
 
-        throw new ApplicationError("You bitch", 500, new Error("cause"));
+    /**
+     * Registers a new user account using the provided credentials.
+     * @param identifier The identifier to register the account with.
+     * @param password The password of the account to create.
+     * @returns The newly created user when the registration succeeds, <code>null</code> when it fails.
+     */
+    register(identifier: string, password: string): Promise<T>;
+}
 
-        const error = new AuthenticationError("Could not authenticate user.");
-        const found = await this.repository.getByIdentifier(identifier);
-        if (found == undefined)
-            throw error;
+export default class BcryptAuthenticationProvider<T extends AuthenticatableUser> implements AuthenticationProvider<T> {
 
-        const verified = await bcrypt.compare(password, found.authenticationPassword());
-        if (!verified)
-            throw error;
-        else
-            return found;
+    /**
+     * The repository to store user information within.
+     */
+    private repository: AuthenticationRepository<T>;
+
+    /**
+     * Creates a new AuthenticationProvider
+     * @param repository The repository to store user information within.
+     */
+    constructor(repository: AuthenticationRepository<T>) {
+        this.repository = repository;
+    }
+
+    /**
+     * Attempts to authenticate the user with the provided email and password.
+     * @param identifier The email to use to authenticate
+     * @param password The password to use to authenticate. The password is hashed using the Bcrypt hashing function.
+     * @returns The found user when authentication succeeds, <code>null</code> when it fails.
+     */
+    async authenticate(identifier: string, password: string): Promise<T> {
+
+        return new Promise(async (resolve, reject) => {
+
+            const error = new IncorrectCredentialsError();
+            const found = await this.repository.getByIdentifier(identifier);
+            if (found == undefined) {
+                reject(error);
+                return;
+            }
+
+            const verified = await bcrypt.compare(password, found.authenticationPassword());
+            if (!verified) {
+                reject(error);
+                return;
+            }
+
+            resolve(found);
+        });
     }
 
     /**
@@ -62,21 +88,49 @@ export default class AuthenticationProvider<T extends AuthenticatableUser> {
      */
     async register(identifier: string, password: string): Promise<T> {
 
-        const found = await this.repository.getByIdentifier(identifier);
-        if (found != undefined)
-            throw new DuplicateUserIdentifier(identifier);
+        return new Promise(async (resolve, reject) => {
 
-        const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(password, salt);
-        const user = await this.repository.create(identifier, hash);
+            const found = await this.repository.getByIdentifier(identifier);
+            if (found != undefined) {
+                reject(new DuplicateUserIdentifier(identifier));
+                return;
+            }
 
-        return user;
+            const salt = await bcrypt.genSalt(10);
+            const hash = await bcrypt.hash(password, salt);
+            const user = await this.repository.create(identifier, hash);
+
+            resolve(user);
+        });
     }
 }
 
-export class DuplicateUserIdentifier extends ApplicationError {
+/**
+ * The most general exception thrown on authentication errors.
+ */
+export class AuthenticationError extends ApplicationErrorBase {
+
+    constructor(name: string,
+                message: string,
+                status: number,
+                cause: Error | ApplicationError,
+                stack: StackFrame[]) {
+        super(name, message, status, cause, stack);
+    }
+}
+
+/**
+ * Thrown when two users has the same identifier, when creating a new user account.
+ */
+export class DuplicateUserIdentifier extends ApplicationErrorBase {
 
     constructor(identifier: string) {
-        super(`Duplicate identifier for user ${identifier}.`, 402, undefined);
+        super("DuplicateUserIdentifier", `Duplicate identifier ${identifier}.`, 402, undefined, undefined);
+    }
+}
+
+export class IncorrectCredentialsError extends AuthenticationError {
+    constructor() {
+        super("IncorrectCredentialsError", "Could not authenticate using the provided credentials.", 401, undefined, undefined);
     }
 }

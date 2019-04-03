@@ -1,5 +1,5 @@
 import config from "./util/secrets";
-import logger from "./util/logger";
+import "./util/logger";
 import express from "express";
 import compression from "compression";
 import bodyParser from "body-parser";
@@ -8,11 +8,9 @@ import path from "path";
 import expressValidator from "express-validator";
 import hbs from "express-handlebars";
 import router from "./controllers/router";
-import mongooseConnect from "./util/mongooseConnect";
 import auto from "./errors/restErrors";
 
 const app = express();
-mongooseConnect();
 
 app.set("port", config.getOrDefault("PORT", 3000));
 app.set("views", path.join(__dirname, "../views"));
