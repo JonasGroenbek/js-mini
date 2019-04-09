@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@types/bcrypt": "^3.0.0",
+    "@types/stack-trace": "0.0.29",
     "async": "^2.6.2",
     "bcrypt": "^3.0.5",
     "bcrypt-nodejs": "^0.0.3",
@@ -48,6 +49,7 @@
     "nodemailer": "^4.7.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
+    "stack-trace": "0.0.10",
     "winston": "^2.4.4"
   },
   "devDependencies": {

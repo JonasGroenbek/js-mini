@@ -1,8 +1,12 @@
-import {ApplicationError} from "../errors/error";
+import {ApplicationError, ApplicationErrorBase} from "../errors/error";
+import {StackFrame} from "stack-trace";
 
-export default class DataError extends ApplicationError {
+export default class DataError extends ApplicationErrorBase {
 
-    constructor(message: string, status: number, cause: Error) {
-        super(message, status, cause);
+    constructor(message: string,
+                status: number,
+                cause: Error | ApplicationError,
+                stack: StackFrame[]) {
+        super("DataError", message, status, cause, stack);
     }
 }

@@ -1,17 +1,21 @@
 import AuthenticationProvider from "../auth/authentication";
-import {createRestConfiguration} from "../auth/router";
-import MongoRepository from "../auth/MongoRepository";
 import UserModel from "../data/User";
-import {getSecretFromConfig, JwtConfiguration} from "../auth/jwt";
+import mongooseConnect from "./mongooseConnect";
+import DefaultJsonWebTokenService, {getSecretFromConfig, JsonWebTokenServiceOptions} from "../auth/jsonWebToken";
+import MongoAuthenticationRepository from "../auth/MongoAuthenticationRepository";
+import {createRestAuthenticationOptions} from "../auth/router";
 
-export const jwtConfiguration: JwtConfiguration = {
+mongooseConnect();
+
+export const jsonWebTokenServiceOptions: JsonWebTokenServiceOptions = {
     algorithm: "HS256",
     getSecret: getSecretFromConfig("JWT_SECRET")
 };
 
-export const authenticationStorage = new MongoRepository(UserModel);
+export const jsonWebTokenService = new DefaultJsonWebTokenService(jsonWebTokenServiceOptions);
+export const authenticationStorage = new MongoAuthenticationRepository(UserModel);
 export const authenticationProvider = new AuthenticationProvider(authenticationStorage);
-export const restAuthentication = createRestConfiguration({
+export const restAuthenticationRouterOptions = createRestAuthenticationOptions({
     authenticationProvider,
-    jwtConfiguration
+    jsonWebTokenService
 });

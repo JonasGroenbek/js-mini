@@ -192,7 +192,7 @@ Below is a list of all the scripts this template has available:
 | `serve-debug`             | Runs the app with the --inspect flag                                                               |
 | `watch-debug`             | The same as `watch` but includes the --inspect flag so you can attach a debugger                   |
 
-## Type Definition (`.d.ts`) Files
+## Typing Definition (`.d.ts`) Files
 TypeScript uses `.d.ts` files to provide types for JavaScript libraries that were not written in TypeScript.
 This is great because once you have a `.d.ts` file, TypeScript can type check that library and provide you better help in your editor.
 The TypeScript community actively shares all of the most up-to-date `.d.ts` files for popular libraries on a GitHub repository called [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types).

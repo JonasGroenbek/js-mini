@@ -1,14 +1,8 @@
-import winston, { Logger } from "winston";
+import winston, {Logger} from "winston";
 
-const logger = new (Logger)({
+export default new Logger({
     transports: [
-        new (winston.transports.Console)({ level: process.env.NODE_ENV === "production" ? "error" : "info" }),
-        new (winston.transports.File)({ filename: "debug.log", level: "debug" })
+        new (winston.transports.Console)({level: process.env.NODE_ENV === "production" ? "error" : "info"}),
+        new (winston.transports.File)({filename: "debug.log", level: "debug"})
     ]
 });
-
-if (process.env.NODE_ENV !== "production") {
-    logger.info("Logging initialized at debug level");
-}
-
-export default logger;
