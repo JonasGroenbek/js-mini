@@ -1,11 +1,12 @@
-export class ApplicationError extends Error {
+export class ApplicationError {
 
-    public message: string;
-    public status: number;
-    public cause: Error;
+    public readonly message: string;
+    public readonly status: number;
+    public readonly cause: Error;
+    public readonly publics = ["message", "status"];
 
     constructor(message: string, status: number, cause: Error) {
-        super(message);
+        this.message = message;
         this.status = status;
         this.cause = cause;
     }

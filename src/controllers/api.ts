@@ -1,9 +1,11 @@
 import express from "express";
-import {rest} from "../auth/router";
+import {restRouter} from "../auth/router";
 import {restAuthentication} from "../util/configuration";
+import {restHandler} from "../errors/handlers";
 
 const router = express.Router();
 
-router.use("/account", rest(restAuthentication));
+router.use("/account", restRouter(restAuthentication));
+router.use(restHandler({}));
 
 export default router;

@@ -2,6 +2,9 @@ import express, {Request, Response} from "express";
 import AuthenticationProvider from "./authentication";
 import AuthenticatableUser from "./AuthenticatableUser";
 import jwt, {JwtConfiguration} from "./jwt";
+import {ApplicationError} from "../errors/error";
+import {restHandler} from "../errors/handlers";
+import router from "../controllers/api";
 
 export type RestAuthenticationConfiguration<T extends AuthenticatableUser> = {
     identifierKey?: string,
@@ -29,11 +32,13 @@ export function createRestConfiguration<T extends AuthenticatableUser>(config: R
     return Object.assign({...defaults}, config);
 }
 
-export function rest<T extends AuthenticatableUser>(configuration: RestAuthenticationConfiguration<T>) {
+export function restRouter<T extends AuthenticatableUser>(configuration: RestAuthenticationConfiguration<T>) {
 
     const router = express.Router();
 
     async function restAuthentication(req: Request, res: Response, next: (err: Error) => void) {
+        next(new ApplicationError("Cannot process that shit.", 422, undefined));
+        return;
         const identifier = req.body[configuration.identifierKey];
         const password = req.body[configuration.passwordKey];
         const user = await configuration.authenticationProvider.authenticate(identifier, password);
