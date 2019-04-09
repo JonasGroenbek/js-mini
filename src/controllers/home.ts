@@ -1,6 +1,9 @@
-import { Request, Response } from "express";
+import {Request, Response} from "express";
+import {ApplicationError, ApplicationErrorBase, attempt} from "../errors/error";
 
 // Renders the home page.
-export default (req: Request, res: Response) => {
-  res.render("home", { title: "Home" });
-};
+export default async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
+    await attempt(next, function () {
+        res.render("home", {title: "Home"});
+    });
+}

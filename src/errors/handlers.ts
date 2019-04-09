@@ -48,11 +48,10 @@ export function handlebarsRenderer(view: string = "applicationError"): Renderer 
 }
 
 export function htmlHandler(options: ApplicationErrorHandlerOptions) {
-    options = Object.assign({renderer: jsonRenderer, sanitizer: sanitizeByEnvironment}, options);
+    options = Object.assign({renderer: handlebarsRenderer("error"), sanitizer: sanitizeByEnvironment}, options);
     return function handler(err: ApplicationError, req: Request, res: Response, next: (err: ApplicationError) => any) {
         const sanitized = options.sanitizer(err);
         const renderer = options.renderer;
-
         renderer(sanitized, req, res);
     };
 }
