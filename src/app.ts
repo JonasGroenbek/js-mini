@@ -8,7 +8,8 @@ import path from "path";
 import expressValidator from "express-validator";
 import hbs from "express-handlebars";
 import router from "./controllers/router";
-import auto from "./errors/restErrors";
+import typeSafe from "./errors/typing";
+import {ApplicationError} from "./errors/error";
 
 const app = express();
 
@@ -33,6 +34,8 @@ app.use(
 );
 
 app.use(router);
-app.use(auto());
+app.use(typeSafe(ApplicationError, (err, req, res) => {
+    res.send("Handle ApplicationError");
+}));
 
 export default app;

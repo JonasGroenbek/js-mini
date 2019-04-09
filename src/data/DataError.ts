@@ -1,5 +1,5 @@
 import {ApplicationError, ApplicationErrorBase} from "../errors/error";
-import {StackFrame} from "@types/stack-trace";
+import {StackFrame} from "stack-trace";
 
 export default class DataError extends ApplicationErrorBase {
 
