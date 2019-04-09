@@ -1,9 +1,10 @@
 export class ApplicationError {
 
+    public readonly name: string = "ApplicationError";
     public readonly message: string;
     public readonly status: number;
     public readonly cause: Error;
-    public readonly publics = ["message", "status"];
+    public readonly publics = ["name", "message", "status"];
 
     constructor(message: string, status: number, cause: Error) {
         this.message = message;
@@ -44,4 +45,19 @@ export class Builder {
 
 export default function error(message: string) {
     return new Builder().message(message);
+}
+
+export async function attempt(next: (err: ApplicationError) => any, perform: () => any) {
+    try {
+        return await perform();
+    } catch (e) {
+        if (e instanceof ApplicationError)
+            return next(e);
+        if (e instanceof Error)
+            return next(new ApplicationError("An error occurred", 500, e));
+        if (typeof e === "string")
+            return next(new ApplicationError(e, 500, undefined));
+
+        return new ApplicationError("Could not handle error.", 500, undefined);
+    }
 }
