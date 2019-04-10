@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {ApplicationError, ApplicationErrorBase, attempt} from "../errors/error";
+import {ApplicationError, attempt} from "../errors/error";
 
 // Renders the home page.
 export default async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
