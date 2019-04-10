@@ -1,16 +1,53 @@
+$background: #fff;
+$primary: #fa0;
+$secondary: #ff8e00;
+
 * {
-    margin: 0;
-    padding: 0;
-    font-family: Helvetica, Arial, sans-serif;
-    color: #5A5A5A
+  margin: 0;
+  padding: 0;
+  font-family: Helvetica, Arial, sans-serif;
+  color: #5A5A5A
 }
 
 body {
-    padding: 20px;
+  padding: 20px;
+  background: $background;
+  line-height: 1.75rem;
 }
 
 #container {
-    max-width: 1024px;
-    margin: 0 auto;
-    padding: 0 2vh;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 2vh;
+}
+
+header {
+  .nav-wrapper {
+    background: $primary;
+  }
+}
+
+h1 {
+  font-size: 3.5rem;
+}
+
+h2 {
+  font-size: 3rem;
+}
+
+h3 {
+  font-size: 2.5rem;
+}
+
+h4 {
+  font-size: 2rem;
+}
+
+h5 {
+  font-size: 1.5rem;
+}
+
+h6 {
+  font-weight: bold;
+  font-size: 1rem;
 }
