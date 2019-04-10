@@ -13,10 +13,9 @@ export interface AuthenticationRepository<T extends AuthenticatableUser> {
 
     /**
      * Creates and returns a new repository.
-     * @param identifier The identifier of the user to create.
-     * @param password The password of the user to create.
+     * @param user The user to persist.
      */
-    create(identifier: string, password: string): Promise<T>;
+    create(user: T): Promise<T>;
 }
 
 export interface AuthenticationProvider<T extends AuthenticatableUser> {
@@ -31,11 +30,10 @@ export interface AuthenticationProvider<T extends AuthenticatableUser> {
 
     /**
      * Registers a new user account using the provided credentials.
-     * @param identifier The identifier to register the account with.
-     * @param password The password of the account to create.
+     * @param user The user to register.
      * @returns The newly created user when the registration succeeds, <code>null</code> when it fails.
      */
-    register(identifier: string, password: string): Promise<T>;
+    register(user: T): Promise<T>;
 }
 
 export default class BcryptAuthenticationProvider<T extends AuthenticatableUser> implements AuthenticationProvider<T> {
@@ -82,25 +80,25 @@ export default class BcryptAuthenticationProvider<T extends AuthenticatableUser>
 
     /**
      * Registers a new user account using the provided credentials.
-     * @param identifier The identifier to register the account with.
-     * @param password The password of the account to create.
+     * @param user The user to register.
      * @returns The newly created user when the registration succeeds, <code>null</code> when it fails.
      */
-    async register(identifier: string, password: string): Promise<T> {
+    async register(user: T): Promise<T> {
 
         return new Promise(async (resolve, reject) => {
 
-            const found = await this.repository.getByIdentifier(identifier);
+            const found = await this.repository.getByIdentifier(user.authenticationIdentifier());
             if (found != undefined) {
-                reject(new DuplicateUserIdentifier(identifier));
+                reject(new DuplicateUserIdentifier(user.authenticationIdentifier()));
                 return;
             }
 
             const salt = await bcrypt.genSalt(10);
-            const hash = await bcrypt.hash(password, salt);
-            const user = await this.repository.create(identifier, hash);
+            const hash = await bcrypt.hash(user.authenticationPassword(), salt);
+            user.setAuthenticationPassword(hash);
+            const created = await this.repository.create(user);
 
-            resolve(user);
+            resolve(created);
         });
     }
 }

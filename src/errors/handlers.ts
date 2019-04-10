@@ -22,7 +22,9 @@ export function sanitizeByEnvironment(err: ApplicationError) {
         return copy;
     }
 
-    return Object.assign({}, err);
+    const copy: any = Object.assign({}, err);
+    copy.publics = undefined;
+    return copy;
 }
 
 export type ApplicationErrorHandlerOptions = {

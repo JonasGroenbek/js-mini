@@ -1,8 +1,10 @@
 import express, {Request, Response} from "express";
 import AuthenticationProvider from "./authentication";
-import AuthenticatableUser from "./AuthenticatableUser";
-import jwt, {JsonWebTokenService} from "./jsonWebToken";
+import AuthenticatableUser, {createAuthenticatableUser} from "./AuthenticatableUser";
+import {JsonWebTokenService} from "./jsonWebToken";
 import {ApplicationError, attempt} from "../errors/error";
+import validator from "../errors/validation";
+import {UserValidationSchema} from "../data/User";
 
 export type RestAuthenticationOptions<T extends AuthenticatableUser> = {
     identifierKey?: string,
@@ -46,9 +48,8 @@ export function restRouter<T extends AuthenticatableUser>(options: RestAuthentic
 
     async function restRegistration(req: Request, res: Response, next: (err: ApplicationError) => void) {
         await attempt(next, async function () {
-            const identifier = req.body[options.identifierKey];
-            const password = req.body[options.passwordKey];
-            const user = await options.authenticationProvider.register(identifier, password);
+            validator.validateOrThrow(req.body, UserValidationSchema);
+            const user = await options.authenticationProvider.register(createAuthenticatableUser(req.body, "email", "password"));
             const token = await options.jsonWebTokenService.encode(user);
             options.renderer(req, res, next, token, user);
         });

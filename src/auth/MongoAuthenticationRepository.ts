@@ -40,15 +40,15 @@ export default class MongoAuthenticationRepository<T extends AuthenticatableUser
 
     /**
      * Creates a new user using the provided identifier and password.
-     * @param identifier
-     * @param password
+     * @param user The user to persist.
      */
-    async create(identifier: string, password: string): Promise<T> {
+    async create(user: T): Promise<T> {
+        const identifier = user.authenticationIdentifier();
         const found = await this.getByIdentifier(identifier);
         if (found)
             return Promise.reject(new DuplicateUserIdentifier(identifier));
 
-        const factoryResult = this.userFactory({[this.identifierKey]: identifier, [this.passwordKey]: password});
+        const factoryResult = this.userFactory(user);
         return this.userModel.create(factoryResult);
     }
 }

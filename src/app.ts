@@ -8,7 +8,6 @@ import path from "path";
 import expressValidator from "express-validator";
 import hbs from "express-handlebars";
 import router from "./controllers/router";
-import {ApplicationError} from "./errors/error";
 
 const app = express();
 
