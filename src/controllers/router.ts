@@ -8,8 +8,8 @@ import register from "./register";
 const router = express.Router();
 
 router.get("/", home);
-router.get("/authenticate", authenticate);
-router.get("/register", register);
+router.use("/authenticate", authenticate);
+router.use("/register", register);
 router.use(htmlHandler({}));
 router.use("/api", api);
 

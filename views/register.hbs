@@ -1,3 +1,54 @@
 {{>head}}
-<h2>Register</h2>
+<div class="row">
+    <div class="col s12">
+        <h2>Register</h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12">
+        <form method="POST">
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="first_name" type="text" class="validate" name="firstName" maxlength="256" required>
+                    <label for="first_name">First Name</label>
+                    <span class="helper-text" data-error="You must enter your first name."
+                          data-success="Beautiful name"></span>
+                </div>
+                <div class="input-field col s6">
+                    <input id="last_name" type="text" class="validate" name="lastName" maxlength="256" required>
+                    <label for="last_name">Last Name</label>
+                    <span class="helper-text" data-error="You must enter your last name."
+                          data-success="Great name"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="email" type="email" class="validate" name="email" required>
+                    <label for="email">Email</label>
+                    <span class="helper-text" data-error="That email address is not valid..."
+                          data-success="We will not abuse your email."></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="password" type="password" class="validate" name="password" required minlength="6">
+                    <label for="password">Password</label>
+                    <span class="helper-text" data-error="Bad password." data-success="That's better"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="repeat-password" type="password" class="validate" name="repeatPassword" minlength="6">
+                    <label for="repeat-password">Repeat Password</label>
+                    <span class="helper-text" data-error="Bad password." data-success="That's better"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <button class="waves-effect waves-light btn-large">Register</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 {{>tail}}

@@ -39,6 +39,7 @@
     "express-handlebars": "3.0.2",
     "express-session": "^1.15.6",
     "express-validator": "^4.3.0",
+    "fastest-validator": "^0.6.17",
     "handlebars": "4.1.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.5",
@@ -48,8 +49,7 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "stack-trace": "0.0.10",
-    "winston": "^2.4.4",
-    "fastest-validator": "^0.6.17"
+    "winston": "^2.4.4"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",

@@ -3,11 +3,15 @@ import AuthenticatableUser from "../auth/AuthenticatableUser";
 import {ValidationSchema} from "fastest-validator";
 
 export const UserSchema = new Schema({
+    firstName: {type: String, required: true},
+    lastName: {type: String, required: true},
     email: {type: String, unique: true, required: true},
     password: {type: String, unique: true, required: true},
 }, {strict: false});
 
 export const UserValidationSchema: ValidationSchema = {
+    firstName: {type: "string", max: 256, required: true},
+    lastName: {type: "string", max: 256, required: true},
     email: {type: "email", max: 256},
     password: {type: "string", min: 6}
 };
@@ -21,6 +25,8 @@ UserSchema.methods.authenticationPassword = function () {
 };
 
 export interface User extends Document, AuthenticatableUser {
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
 }
