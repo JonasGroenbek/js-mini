@@ -4,7 +4,7 @@ import {User} from "./User";
 const SECONDS = 1;
 const EXPIRES = 60 * SECONDS;
 
-export const PositionSchema = new Schema({
+export const UserPositionSchema = new Schema({
     user: {type: Schema.Types.ObjectId, ref: "User", required: true},
     created: {type: Date, expires: EXPIRES, default: Date.now},
     location: {
@@ -13,12 +13,12 @@ export const PositionSchema = new Schema({
     }
 });
 
-export interface Position extends Document {
+export interface UserPosition extends Document {
     user: User;
     created: Date;
     location: { type: String, coordinates: [number] };
 }
 
-PositionSchema.index({loc: "2dsphere"}, {"background": true});
+UserPositionSchema.index({loc: "2dsphere"}, {"background": true});
 
-export default mongoose.model<Position>("Position", PositionSchema);
+export default mongoose.model<UserPosition>("UserPosition", UserPositionSchema);
