@@ -1,7 +1,7 @@
 import express, {Request, Response} from "express";
 import {ApplicationError, attempt} from "../errors/error";
 import bodyParser from "body-parser";
-import {sessionStore} from "../util/formHelpers";
+import {sessionFormErrors} from "../util/formErrors";
 import {authenticationProvider} from "../util/configuration";
 import {sessionAuthentication} from "../auth/authenticationMiddleware";
 import {IncorrectCredentialsError} from "../auth/authentication";
@@ -16,7 +16,7 @@ router.use(bodyParser.urlencoded({extended: true}));
 router.get("/", async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
     await attempt(next, function () {
         res.render("authenticate", {
-            formErrors: sessionStore(req).getErrors(),
+            formErrors: sessionFormErrors(req).getErrors(),
             messenger: sessionMessenger(req)
         });
     });
@@ -27,7 +27,7 @@ router.get("/", async function (req: Request, res: Response, next: (err: Applica
 router.post("/", async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
     await attempt(next, async function () {
 
-        const errors = sessionStore(req);
+        const errors = sessionFormErrors(req);
         try {
             const result = await authenticationProvider.authenticate(req.body.email, req.body.password);
             sessionAuthentication(req).setAuthenticatedUser(result);

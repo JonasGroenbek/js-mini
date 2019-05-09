@@ -1,9 +1,9 @@
 import express, {Request, Response} from "express";
 import {ApplicationError, attempt} from "../errors/error";
 import bodyParser from "body-parser";
-import {sessionStore} from "../util/formHelpers";
 import BlogPostModel from "../data/BlogPost";
 import {sessionAuthentication} from "../auth/authenticationMiddleware";
+import {sessionFormErrors} from "../util/formErrors";
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ router.use(bodyParser.urlencoded({extended: true}));
 router.get("/", async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
     await attempt(next, function () {
         res.render("create_blog_post", {
-            formErrors: sessionStore(req).getErrors()
+            formErrors: sessionFormErrors(req).getErrors()
         });
     });
 });
@@ -34,7 +34,7 @@ router.post("/", async function (req: Request, res: Response, next: (err: Applic
 
         } catch (e) {
             console.error(e);
-            sessionStore(req).pushError("form", "Could not create the blog post.");
+            sessionFormErrors(req).pushError("form", "Could not create the blog post.");
             res.redirect("create-post");
         }
     });

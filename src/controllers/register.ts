@@ -1,10 +1,8 @@
 import express, {Request, Response} from "express";
 import {ApplicationError, attempt} from "../errors/error";
 import bodyParser from "body-parser";
-import {sessionStore} from "../util/formHelpers";
-import UserModel from "../data/User";
+import {sessionFormErrors} from "../util/formErrors";
 import {sessionAuthentication} from "../auth/authenticationMiddleware";
-import authentication from "../auth/authentication";
 import {authenticationProvider} from "../util/configuration";
 import {createAuthenticatableUser} from "../auth/AuthenticatableUser";
 
@@ -17,7 +15,7 @@ router.use(bodyParser.urlencoded({extended: true}));
 router.get("/", async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
     await attempt(next, function () {
         res.render("register", {
-            formErrors: sessionStore(req).getErrors()
+            formErrors: sessionFormErrors(req).getErrors()
         });
     });
 });
@@ -26,7 +24,7 @@ router.get("/", async function (req: Request, res: Response, next: (err: Applica
 // @ts-ignore
 router.post("/", async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
 
-    const errors = sessionStore(req);
+    const errors = sessionFormErrors(req);
     const {firstName, lastName, email, password, repeatPassword} = req.body;
 
     if (!firstName || firstName.length < 1)

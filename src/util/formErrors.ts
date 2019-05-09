@@ -85,7 +85,7 @@ export class SessionFormErrors implements FormErrors {
  * @param request The request to attach errors to.
  * @param sessionKey The session key where the errors are stored.
  */
-export function sessionStore(request: Request, sessionKey: string = "form-errors"): SessionFormErrors {
+export function sessionFormErrors(request: Request, sessionKey: string = "form-errors"): SessionFormErrors {
     return new SessionFormErrors(request, sessionKey);
 }
 

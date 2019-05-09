@@ -9,7 +9,7 @@ import expressValidator from "express-validator";
 import hbs from "express-handlebars";
 import router from "./controllers/router";
 import session from "express-session";
-import {handlebarsErrorHandler} from "./util/formHelpers";
+import {handlebarsErrorHandler} from "./util/formErrors";
 import {messengerRenderer} from "./util/messenger";
 
 const app = express();
