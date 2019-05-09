@@ -10,6 +10,7 @@ import hbs from "express-handlebars";
 import router from "./controllers/router";
 import session from "express-session";
 import {handlebarsErrorHandler} from "./util/formHelpers";
+import {messengerRenderer} from "./util/messenger";
 
 const app = express();
 
@@ -21,7 +22,8 @@ app.engine("hbs", hbs({
     layoutsDir: path.join(__dirname + "/../views/layouts"),
     partialsDir: path.join(__dirname + "/../views/partials"),
     helpers: {
-        formErrors: handlebarsErrorHandler
+        formErrors: handlebarsErrorHandler,
+        messengerRenderer
     }
 }));
 

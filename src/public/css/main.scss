@@ -1,13 +1,13 @@
-$background: #fff;
+$background: #f6f8fa;
 $textColor: #1e1e1e;
-$headerBackground: #cad6ff;
+$headerBackground: #24292e;
 $primary: #fff;
 $secondary: #ff254a;
 
 * {
   margin: 0;
   padding: 0;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: Helvetica, sans-serif !important;
   color: $textColor;
 }
 
@@ -28,7 +28,6 @@ main {
 
 header {
   text-align: center;
-  padding: 20px 20px 10px 20px;
   background: $headerBackground;
 
   nav {
@@ -42,9 +41,11 @@ header {
 
         li {
           font-weight: bolder;
+          color: #fff;
 
           a {
-            color: $textColor
+            color: #fff;
+            font-size: 14px;
           }
         }
       }
@@ -54,6 +55,7 @@ header {
 
 h1 {
   font-size: 3.5rem;
+  color: #fff;
 }
 
 h2 {
@@ -84,7 +86,9 @@ h5 {
 }
 
 div.post {
-  background: $headerBackground;
+  background-color: #fff;
+  border: 1px solid #d1d5da;
+  border-radius: 3px;
   padding: 10px 20px 20px 20px !important;
 
   .images {
@@ -95,5 +99,26 @@ div.post {
       display: block;
       margin-bottom: 20px;
     }
+  }
+}
+
+.toast.message {
+  color: #fff;
+  font-weight: bold;
+
+  &.success {
+    background-color: #339900
+  }
+
+  &.error {
+    background-color: #cc3300
+  }
+
+  &.warning {
+    background-color: #ff9966
+  }
+
+  &.info {
+    background-color: #eee;
   }
 }

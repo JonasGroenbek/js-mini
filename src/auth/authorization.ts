@@ -80,7 +80,7 @@ export class JwtAuthorizationProvider<T extends AuthenticatableUser> implements 
             // @ts-ignore
             req[destination] = await this.jsonWebTokenService.verify(token);
         } catch (e) {
-            const message = `Could not authorize. ${e.message}.`;
+            const message = `Could not authorize. ${e.text}.`;
             next(new AuthorizationError(message, e));
         }
     }

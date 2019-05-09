@@ -28,7 +28,7 @@ export class Validator extends FrameworkValidator {
 
 export class ValidationError extends ApplicationErrorBase {
 
-    public readonly publics = ["name", "message", "status", "validationErrors"];
+    public readonly publics = ["name", "text", "status", "validationErrors"];
     public readonly validationErrors: FrameworkValidationError[];
 
     constructor(validationErrors: FrameworkValidationError[]) {

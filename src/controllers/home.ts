@@ -2,6 +2,7 @@ import {Request, Response} from "express";
 import {ApplicationError, attempt} from "../errors/error";
 import {sessionAuthentication} from "../auth/authenticationMiddleware";
 import BlogPostModel from "../data/BlogPost";
+import {sessionMessenger} from "../util/messenger";
 
 async function getBlogPosts() {
     return BlogPostModel.find({}).sort({created: -1}).exec();
@@ -12,6 +13,7 @@ export default async function (req: Request, res: Response, next: (err: Applicat
     await attempt(next, async function () {
         res.render("home", {
             authenticatedUser: sessionAuthentication(req).getAuthenticatedUser(),
+            messenger: sessionMessenger(req),
             posts: await getBlogPosts()
         });
     });

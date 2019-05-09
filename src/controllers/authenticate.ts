@@ -5,6 +5,7 @@ import {sessionStore} from "../util/formHelpers";
 import {authenticationProvider} from "../util/configuration";
 import {sessionAuthentication} from "../auth/authenticationMiddleware";
 import {IncorrectCredentialsError} from "../auth/authentication";
+import {sessionMessenger} from "../util/messenger";
 
 const router = express.Router();
 
@@ -15,7 +16,8 @@ router.use(bodyParser.urlencoded({extended: true}));
 router.get("/", async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
     await attempt(next, function () {
         res.render("authenticate", {
-            formErrors: sessionStore(req).getErrors()
+            formErrors: sessionStore(req).getErrors(),
+            messenger: sessionMessenger(req)
         });
     });
 });
@@ -29,8 +31,8 @@ router.post("/", async function (req: Request, res: Response, next: (err: Applic
         try {
             const result = await authenticationProvider.authenticate(req.body.email, req.body.password);
             sessionAuthentication(req).setAuthenticatedUser(result);
+            sessionMessenger(req).pushSuccess("You were successfully authenticated.");
             res.redirect("/");
-            return;
         } catch (e) {
             if (e instanceof IncorrectCredentialsError) {
                 errors.pushError("form", "Could not authenticate using provided credentials.");
