@@ -3,6 +3,7 @@ import {User} from "./User";
 
 export const BlogPostSchema = new Schema({
     content: {type: String, required: true},
+    title: {type: Schema.Types.String, required: true},
     images: [String],
     author: {type: Schema.Types.ObjectId, ref: "User", required: true},
     likedBy: [{type: Schema.Types.ObjectId, ref: "User"}],
@@ -20,6 +21,7 @@ BlogPostSchema.virtual("likedByCount", function () {
 });
 
 export interface BlogPost extends Document {
+    title: string;
     content: string;
     images: [string];
     author: User;

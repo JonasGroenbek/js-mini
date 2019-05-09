@@ -1,3 +1,19 @@
 {{>head}}
-<h2>Home</h2>
+<h2>Posts</h2>
+<div class="posts">
+    {{#unless posts}}
+        <p>Sorry, there are currently no posts.</p>
+    {{/unless}}
+    {{#each posts}}
+        <div class="row">
+            <div class="col s12 post">
+                <h3 class="title">{{this.title}}</h3>
+                <p class="created">{{this.created}}</p>
+                <div class="content">
+                    {{this.content}}
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</div>
 {{>tail}}
