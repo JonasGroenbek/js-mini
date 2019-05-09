@@ -2,6 +2,11 @@ import express, {Request, Response} from "express";
 import {ApplicationError, attempt} from "../errors/error";
 import bodyParser from "body-parser";
 import {sessionStore} from "../util/formHelpers";
+import UserModel from "../data/User";
+import {sessionAuthentication} from "../auth/authenticationMiddleware";
+import authentication from "../auth/authentication";
+import {authenticationProvider} from "../util/configuration";
+import {createAuthenticatableUser} from "../auth/AuthenticatableUser";
 
 const router = express.Router();
 
@@ -10,8 +15,6 @@ router.use(bodyParser.urlencoded({extended: true}));
 // Renders the registration page.
 // @ts-ignore
 router.get("/", async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
-    sessionStore(req).pushError("firstName", "This is a bad format.");
-    sessionStore(req).pushError("firstName", "This name is not long enough.");
     await attempt(next, function () {
         res.render("register", {
             formErrors: sessionStore(req).getErrors()
@@ -42,7 +45,17 @@ router.post("/", async function (req: Request, res: Response, next: (err: Applic
         return;
     }
 
-    res.send(JSON.stringify(req.body));
+    const toInsert = createAuthenticatableUser(req.body, "email", "password");
+    const created = await authenticationProvider.register(toInsert);
+    if (created) {
+        const sessionAuth = sessionAuthentication(req);
+        sessionAuth.setAuthenticatedUser(created);
+        res.redirect("/");
+        return;
+    }
+
+    errors.pushError("form", "Could not register user account.");
+    res.redirect("register");
 });
 
 function validateEmail(email: string) {

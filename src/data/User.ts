@@ -6,8 +6,8 @@ export const UserSchema = new Schema({
     firstName: {type: String, required: true},
     lastName: {type: String, required: true},
     email: {type: String, unique: true, required: true},
-    password: {type: String, unique: true, required: true},
-}, {strict: false});
+    password: {type: String, required: true},
+}, {strict: true});
 
 export const UserValidationSchema: ValidationSchema = {
     firstName: {type: "string", max: 256, required: true},

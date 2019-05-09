@@ -25,12 +25,13 @@ export function redirect(to: string) {
     };
 }
 
-export type OnUnauthorized = (res: Response, next: (err: Error) => void) => void;
+export type OnUnauthorized = (res: Response, next: (err?: Error) => void) => void;
 
 export function sessionAuthenticationGuard(onUnauthorized: OnUnauthorized, key: string = "authenticatedUser", check = defaultSessionAuthenticationCheck) {
-    return function (req: Request, res: Response, next: (err: Error) => void) {
-        if (!check(req, key)) {
+    return function (req: Request, res: Response, next: (err?: Error) => void) {
+        if (!check(req, key))
             onUnauthorized(res, next);
-        }
+        else
+            next();
     };
 }
