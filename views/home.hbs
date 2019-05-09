@@ -12,6 +12,14 @@
                 <div class="content">
                     {{this.content}}
                 </div>
+
+                <ul class="images">
+                    {{#each this.images}}
+                        <li>
+                            <img alt="location image" src="{{{this}}}"/>
+                        </li>
+                    {{/each}}
+                </ul>
             </div>
         </div>
     {{/each}}

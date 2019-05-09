@@ -20,7 +20,7 @@
         <div class="file-field input-field">
             <div class="btn">
                 <span>ADD IMAGE</span>
-                <input id="image-input" type="file">
+                <input id="image-input" multiple type="file">
             </div>
             <div class="file-path-wrapper">
                 <input class="file-path validate" type="text">
@@ -60,8 +60,10 @@
                 const value = submit[key];
                 const input = document.createElement('input');
                 input.name = key;
-                console.log(typeof value);
-                input.value = value;
+                if (Array.isArray(value))
+                    input.value = value.join(";;");
+                else
+                    input.value = value;
                 form.appendChild(input);
             });
 
@@ -74,7 +76,6 @@
 
         imageInput.addEventListener('change', function () {
             imageList.html = "";
-            submit.images = [];
             for (let i = 0; i < imageInput.files.length; i++) {
                 const file = imageInput.files[i];
                 const imageElement = document.createElement("img");

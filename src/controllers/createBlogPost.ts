@@ -25,7 +25,7 @@ router.post("/", async function (req: Request, res: Response, next: (err: Applic
             await BlogPostModel.create({
                 title: req.body.title,
                 content: req.body.content,
-                images: req.body.images || [],
+                images: req.body.images.split(";;"),
                 author: sessionAuthentication(req).getAuthenticatedUser()._id,
                 position: [req.body.longitude, req.body.latitude]
             });
