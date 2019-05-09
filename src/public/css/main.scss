@@ -1,29 +1,54 @@
 $background: #fff;
-$primary: #fa0;
-$secondary: #ff8e00;
+$textColor: #1e1e1e;
+$headerBackground: #cad6ff;
+$primary: #fff;
+$secondary: #ff254a;
 
 * {
   margin: 0;
   padding: 0;
   font-family: Helvetica, Arial, sans-serif;
-  color: #5A5A5A
+  color: $textColor;
 }
 
+ html {
+   padding: 0;
+ }
+
 body {
-  padding: 20px;
   background: $background;
   line-height: 1.75rem;
 }
 
-#container {
+main {
   max-width: 1024px;
   margin: 0 auto;
-  padding: 0 2vh;
+  padding: 0 20px;
 }
 
 header {
-  .nav-wrapper {
-    background: $primary;
+  text-align: center;
+  padding: 20px 20px 10px 20px;
+  background: $headerBackground;
+
+  nav {
+    background: $headerBackground;
+    box-shadow: none;
+
+    .nav-wrapper {
+
+      ul {
+        width: 100%;
+
+        li {
+          font-weight: bolder;
+
+          a {
+            color: $textColor
+          }
+        }
+      }
+    }
   }
 }
 
@@ -32,24 +57,20 @@ h1 {
 }
 
 h2 {
-  font-size: 3rem;
-}
-
-h3 {
   font-size: 2.5rem;
 }
 
-h4 {
+h3 {
   font-size: 2rem;
 }
 
-h5 {
+h4 {
   font-size: 1.5rem;
 }
 
-h6 {
-  font-weight: bold;
+h5 {
   font-size: 1rem;
+  font-weight: bold;
 }
 
 .form-errors {

@@ -10,22 +10,19 @@
     <title>{{title}}</title>
 </head>
 <body>
-<div id="container">
-    <header>
-        <h1>Location Blog</h1>
-        <nav>
-            <div class="nav-wrapper">
-                <ul id="nav-mobile" class="left hide-on-med-and-down">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/authenticate">Authenticate</a></li>
-                    <li><a href="/register">Register</a></li>
-                    {{#if authenticatedUser }}
-                        <li style="float:right">Authenticated as: {{authenticatedUser.firstName}} {{authenticatedUser.lastName}}</li>
-                    {{/if}}
-                </ul>
-            </div>
-        </nav>
-    </header>
-    <main>
-
-    </main>
+<header>
+    <h1>Location Blog</h1>
+    <nav>
+        <div class="nav-wrapper">
+            <ul id="nav-mobile" class="left hide-on-med-and-down">
+                <li><a href="/">Home</a></li>
+                <li><a href="/authenticate">Authenticate</a></li>
+                <li><a href="/register">Register</a></li>
+                {{#if authenticatedUser }}
+                    <li style="float:right; padding: 0 10px">{{authenticatedUser.firstName}} {{authenticatedUser.lastName}}</li>
+                {{/if}}
+            </ul>
+        </div>
+    </nav>
+</header>
+<main>
