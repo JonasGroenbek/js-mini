@@ -1,5 +1,3 @@
-import {authenticationProvider} from "../util/configuration";
-
 export default interface AuthenticatableUser {
 
     authenticationIdentifier(): string;

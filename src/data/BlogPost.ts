@@ -6,11 +6,8 @@ export const BlogPostSchema = new Schema({
     title: {type: Schema.Types.String, required: true},
     images: [String],
     author: {type: Schema.Types.ObjectId, ref: "User", required: true},
+    position: {type: [Schema.Types.Number], index: "2dsphere"},
     likedBy: [{type: Schema.Types.ObjectId, ref: "User"}],
-    position: {
-        longitude: {type: Number, required: true},
-        latitude: {type: Schema.Types.Number, required: true}
-    },
     created: {type: Date, default: Date.now},
     updated: Date
 });

@@ -6,7 +6,7 @@ export async function getBlogPosts() {
 }
 
 export async function getBlogPost(args: { id: string }) {
-    const result =  await BlogPostModel.findById(args.id).exec();
+    const result = await BlogPostModel.findById(args.id).exec();
     result.author = await UserModel.findById(result.author).exec();
     return result;
 }

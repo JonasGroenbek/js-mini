@@ -1,0 +1,113 @@
+{{>head}}
+<h2>Create Post</h2>
+<div class="row">
+    {{formErrors formErrors.form}}
+    <div class="col m12 l8">
+        <div class="row">
+            {{formErrors formErrors.title}}
+            <div class="input-field col s12">
+                <input id="title" type="text" class="validate" name="title" required>
+                <label for="title">Title</label>
+            </div>
+        </div>
+        <div class="row">
+            {{formErrors formErrors.content}}
+            <div class="input-field col s12">
+                <textarea name="ignore" required></textarea>
+            </div>
+        </div>
+        <div style="height: 500px; width: 100%" id="map"></div>
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>ADD IMAGE</span>
+                <input id="image-input" type="file">
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <button id="submit-post" class="waves-effect waves-light btn-large">Create</button>
+            </div>
+        </div>
+    </div>
+    <form method="POST" id="form" style="display:none;">
+    </form>
+    <div class="col m12 l4">
+        <p style="font-weight: bold">Images</p>
+        <ul id="preview-images">
+
+        </ul>
+    </div>
+
+    <script>
+
+        const submit = {images: []};
+        const mde = new SimpleMDE();
+        mde.codemirror.on("change", function () {
+            submit.content = mde.value();
+        });
+
+        const form = document.getElementById("form");
+        const titleInput = document.getElementById("title");
+        const imageInput = document.getElementById('image-input');
+        const imageList = document.getElementById('preview-images');
+
+        document.getElementById("submit-post").addEventListener('click', function () {
+
+            Object.keys(submit).forEach(key => {
+                const value = submit[key];
+                const input = document.createElement('input');
+                input.name = key;
+                console.log(typeof value);
+                input.value = value;
+                form.appendChild(input);
+            });
+
+            form.submit();
+        });
+
+        titleInput.addEventListener('change', function () {
+            submit.title = titleInput.value;
+        });
+
+        imageInput.addEventListener('change', function () {
+            imageList.html = "";
+            submit.images = [];
+            for (let i = 0; i < imageInput.files.length; i++) {
+                const file = imageInput.files[i];
+                const imageElement = document.createElement("img");
+                const reader = new FileReader();
+                reader.onload = function () {
+                    submit.images.push(reader.result);
+                    imageElement.src = reader.result;
+                    imageElement.style = 'max-height: 150px; max-width: 100%; display: block; margin-top: 20px;';
+                    imageList.appendChild(imageElement);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -34.397, lng: 150.644},
+            zoom: 8
+        });
+
+        let marker;
+
+        map.addListener('center_changed', function () {
+            if (marker)
+                marker.setMap(null);
+            const center = map.getCenter();
+            marker = new google.maps.Marker({
+                position: center, map
+            });
+
+            submit.latitude = center.lat();
+            submit.longitude = center.lng();
+        });
+
+    </script>
+</div>
+{{>tail}}

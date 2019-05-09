@@ -1,15 +1,15 @@
 import {Request, Response} from "express";
-import AuthenticatableUser from "./AuthenticatableUser";
+import {User} from "../data/User";
 
 export function sessionAuthentication(req: Request, key: string = "authenticatedUser") {
     return {
         isAuthenticated() {
             return !!req.session[key];
         },
-        getAuthenticatedUser(): AuthenticatableUser {
+        getAuthenticatedUser(): User {
             return req.session[key];
         },
-        setAuthenticatedUser(user: AuthenticatableUser): void {
+        setAuthenticatedUser(user: User): void {
             req.session[key] = user;
         }
     };

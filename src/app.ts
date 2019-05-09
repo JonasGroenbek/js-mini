@@ -27,7 +27,7 @@ app.engine("hbs", hbs({
 
 app.use(compression());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true}));
 app.use(expressValidator());
 app.use(lusca.xframe("SAMEORIGIN"));
 app.use(lusca.xssProtection(true));
