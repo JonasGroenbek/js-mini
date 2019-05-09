@@ -16,8 +16,10 @@
         <div class="nav-wrapper">
             <ul id="nav-mobile" class="left hide-on-med-and-down">
                 <li><a href="/">Home</a></li>
-                <li><a href="/authenticate">Authenticate</a></li>
-                <li><a href="/register">Register</a></li>
+                {{#unless authenticatedUser }}
+                    <li><a href="/authenticate">Authenticate</a></li>
+                    <li><a href="/register">Register</a></li>
+                {{/unless}}
                 {{#if authenticatedUser }}
                     <li style="float:right; padding: 0 10px">{{authenticatedUser.firstName}} {{authenticatedUser.lastName}}</li>
                 {{/if}}
