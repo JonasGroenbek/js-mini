@@ -8,6 +8,7 @@ import path from "path";
 import expressValidator from "express-validator";
 import hbs from "express-handlebars";
 import router from "./controllers/router";
+import session from "express-session";
 
 const app = express();
 
@@ -17,7 +18,7 @@ app.set("view engine", "hbs");
 app.engine("hbs", hbs({
     extname: "hbs",
     layoutsDir: path.join(__dirname + "/../views/layouts"),
-    partialsDir: path.join(__dirname + "/../views/partials")
+    partialsDir: path.join(__dirname + "/../views/partials"),
 }));
 
 app.use(compression());
@@ -26,6 +27,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressValidator());
 app.use(lusca.xframe("SAMEORIGIN"));
 app.use(lusca.xssProtection(true));
+app.use(session({secret: config.get("SESSION_SECRET")}));
 
 app.use(
     express.static(path.join(__dirname, "public"), {maxAge: 31557600000})
