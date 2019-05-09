@@ -33,6 +33,7 @@ router.post("/", async function (req: Request, res: Response, next: (err: Applic
             res.redirect("/");
 
         } catch (e) {
+            console.error(e);
             sessionStore(req).pushError("form", "Could not create the blog post.");
             res.redirect("create-post");
         }

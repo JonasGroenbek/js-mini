@@ -1,9 +1,9 @@
 {{>head}}
 <h2>Create Post</h2>
-<div class="row">
+<div class="row panel pad">
     {{formErrors formErrors.form}}
-    <div class="col m12 l8">
-        <div class="row">
+    <div class="col s12">
+        <div class="row" style="margin-top: 18px">
             {{formErrors formErrors.title}}
             <div class="input-field col s12">
                 <input id="title" type="text" class="validate" name="title" required>
@@ -16,16 +16,47 @@
                 <textarea name="ignore" required></textarea>
             </div>
         </div>
-        <div style="height: 500px; width: 100%" id="map"></div>
-        <div class="file-field input-field">
-            <div class="btn">
-                <span>ADD IMAGE</span>
-                <input id="image-input" multiple type="file">
+        <div class="row">
+            <div style="display:none" class="file-field input-field">
+                <div class="btn" style="width: 100%; box-sizing: border-box; margin-top: 10px">
+                    <span>ADD IMAGE</span>
+                    <input id="image-input" multiple type="file">
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                </div>
             </div>
-            <div class="file-path-wrapper">
-                <input class="file-path validate" type="text">
-            </div>
+            <ul id="preview-images">
+                <li id="add-image-item">
+                    <img src="/res/add_image.svg"/>
+                </li>
+            </ul>
         </div>
+        <style>
+            #preview-images li img {
+                height: 100px;
+                width: auto;
+                display: block;
+                margin: 0;
+            }
+
+            #preview-images li:not(:first-of-type) {
+                border: 1px solid #d1d5da;
+            }
+
+            #preview-images li {
+                display: inline-block;
+                float: left;
+                margin-right: 20px;
+                margin-bottom: 20px;
+            }
+
+            #preview-images {
+                overflow: auto;
+            }
+
+        </style>
+        <div style="height: 500px; width: 100%" class="panel pad" id="map"></div>
         <div class="row">
             <div class="input-field col s12">
                 <button id="submit-post" class="waves-effect waves-light btn-large">Create</button>
@@ -34,13 +65,6 @@
     </div>
     <form method="POST" id="form" style="display:none;">
     </form>
-    <div class="col m12 l4">
-        <p style="font-weight: bold">Images</p>
-        <ul id="preview-images">
-
-        </ul>
-    </div>
-
     <script>
 
         const submit = {images: []};
@@ -50,9 +74,14 @@
         });
 
         const form = document.getElementById("form");
+        const addImageItem = document.getElementById("add-image-item");
         const titleInput = document.getElementById("title");
         const imageInput = document.getElementById('image-input');
         const imageList = document.getElementById('preview-images');
+
+        addImageItem.addEventListener('click', function () {
+            imageInput.click();
+        });
 
         document.getElementById("submit-post").addEventListener('click', function () {
 
@@ -75,7 +104,6 @@
         });
 
         imageInput.addEventListener('change', function () {
-            imageList.html = "";
             for (let i = 0; i < imageInput.files.length; i++) {
                 const file = imageInput.files[i];
                 const imageElement = document.createElement("img");
@@ -83,8 +111,9 @@
                 reader.onload = function () {
                     submit.images.push(reader.result);
                     imageElement.src = reader.result;
-                    imageElement.style = 'max-height: 150px; max-width: 100%; display: block; margin-top: 20px;';
-                    imageList.appendChild(imageElement);
+                    const li = document.createElement("li");
+                    li.appendChild(imageElement);
+                    imageList.appendChild(li);
                 };
                 reader.readAsDataURL(file);
             }
@@ -97,16 +126,16 @@
 
         let marker;
 
-        map.addListener('center_changed', function () {
+        map.addListener('click', function (e) {
             if (marker)
                 marker.setMap(null);
-            const center = map.getCenter();
             marker = new google.maps.Marker({
-                position: center, map
+                position: e.latLng, map
             });
 
-            submit.latitude = center.lat();
-            submit.longitude = center.lng();
+            map.panTo(e.latLng);
+            submit.latitude = e.latLng.lat();
+            submit.longitude = e.latLng.lng();
         });
 
     </script>
