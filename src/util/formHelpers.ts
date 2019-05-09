@@ -1,99 +1,106 @@
 import {Request} from "express";
-import SafeString = Handlebars.SafeString;
+import {SafeString, escapeExpression} from "handlebars";
 
 export type Errors = { [key: string]: string[] };
 
-export interface Suite {
+export interface FormErrors {
+
+    /**
+     * Adds a new error to the provided field.
+     * @param field The field where the error occurred.
+     * @param error The error message.
+     */
     pushError(field: string, error: string): void;
 
-    getErrors(): Errors;
+    /**
+     * Returns all the errors in the suite.
+     *
+     * When <code>clear == true<code>, all the errors are removed.
+     */
+    getErrors(clear?: boolean): Errors;
 
-    handlebars(field: string): SafeString;
-
+    /**
+     * Checks if there are currently any errors.
+     */
     hasErrors(): boolean;
+
+    /**
+     * Returns the number of active errors.
+     */
+    countErrors(): number;
 }
 
-export interface Storage {
+export class SessionFormErrors implements FormErrors {
 
-    get(field: string): string[];
-
-    push(field: string, error: string): void;
-
-    clear(field: string): void;
-
-    clearAll(): void;
-}
-
-export class SessionStorage implements Storage {
-
+    private size: number = 0;
     private readonly request: Request;
     private readonly key: string;
 
     constructor(request: Request, sessionKey: string) {
         this.request = request;
         this.key = sessionKey;
+
+        if (!request.session[this.key])
+            request.session[this.key] = {};
+
+        const counter = (errors: string[]) => errors.length;
+        this.size = Object.values(request.session[this.key])
+            .map(counter)
+            .reduce((acc, n) => acc + n, 0);
+    }
+
+    countErrors(): number {
+        return this.size;
+    }
+
+    getErrors(clear: boolean = true): Errors {
+        const result = Object.assign({}, this.request.session[this.key]);
+        if (clear)
+            this.clearAll();
+
+        return result;
+    }
+
+    hasErrors(): boolean {
+        return this.size > 0;
     }
 
     clearAll(): void {
         this.request.session[this.key] = {};
+        this.size = 0;
     }
 
-    clear(field: string): void {
-        if (this.request.session[this.key])
-            this.request.session[this.key][field] = [];
-    }
-
-    push(field: string, error: string): void {
-        if (!this.request.session[this.key]) {
-            this.request.session[this.key] = {};
-        }
+    pushError(field: string, error: string): void {
 
         if (!this.request.session[this.key][field])
             this.request.session[this.key][field] = [];
 
         this.request.session[this.key][field].push(error);
-    }
-
-    get(field: string): string[] {
-        if (!this.request.session[this.key] || !this.request.session[this.key][field])
-            return [];
-
-        return this.request.session[this.key][field];
+        this.size++;
     }
 }
 
-export function session(request: Request, sessionKey: string = "form-errors") {
-    return factory(new SessionStorage(request, sessionKey));
+/**
+ * Creates a new SessionFormErrors object.
+ * @param request The request to attach errors to.
+ * @param sessionKey The session key where the errors are stored.
+ */
+export function sessionStore(request: Request, sessionKey: string = "form-errors"): SessionFormErrors {
+    return new SessionFormErrors(request, sessionKey);
 }
 
-function factory(storage: Storage): Suite {
+/**
+ * Renders a list of error messages.
+ * @param errors The errors to render.
+ */
+export function handlebarsErrorHandler(errors: string[]): SafeString {
 
-    let hasErrors = false;
+    if (!errors || errors.length < 1)
+        return new SafeString("");
 
-    return {
-        pushError(field: string, error: string): void {
-            storage.push(field, error);
-            hasErrors = true;
-        },
-        hasErrors(): boolean {
-            return hasErrors;
-        },
-        handlebars(field: string): SafeString {
-            const errors = storage.get(field);
-
-            if (errors.length > 0)
-                return new SafeString("");
-
-            const result = new SafeString(
-                `<ul class="form-errors">` +
-                errors.map(error => `<li>${error}</li>`).join("\n") +
-                `</ul>`
-            );
-
-            storage.clear(field);
-            return result;
-        }
-    };
+    return new SafeString(
+        `<ul class="form-errors">` +
+        errors.map(error => `<li>${escapeExpression(error)}</li>`).join("\n") +
+        `</ul>`
+    );
 }
-
-export default factory;

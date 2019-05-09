@@ -51,3 +51,13 @@ h6 {
   font-weight: bold;
   font-size: 1rem;
 }
+
+.form-errors {
+  padding: 10px;
+  list-style: circle;
+}
+
+.form-errors li {
+  color: orangered;
+  padding-bottom: 10px;
+}

@@ -9,6 +9,7 @@ import expressValidator from "express-validator";
 import hbs from "express-handlebars";
 import router from "./controllers/router";
 import session from "express-session";
+import {handlebarsErrorHandler} from "./util/formHelpers";
 
 const app = express();
 
@@ -19,6 +20,9 @@ app.engine("hbs", hbs({
     extname: "hbs",
     layoutsDir: path.join(__dirname + "/../views/layouts"),
     partialsDir: path.join(__dirname + "/../views/partials"),
+    helpers: {
+        formErrors: handlebarsErrorHandler
+    }
 }));
 
 app.use(compression());
