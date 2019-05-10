@@ -30,4 +30,26 @@ export interface BlogPost extends Document {
     likedByCount(): number;
 }
 
-export default mongoose.model<BlogPost>("BlogPost", BlogPostSchema);
+const Model = mongoose.model<BlogPost>("BlogPost", BlogPostSchema);
+
+export default Model;
+
+export async function getBlogPosts() {
+
+    const results = await Model.aggregate([{
+        $lookup: {
+            from: "users",
+            localField: "author",
+            foreignField: "_id",
+            as: "author"
+        }
+    },
+    ])
+        .sort({created: -1})
+        .exec();
+
+    return results.map((post: any) => {
+        post.author = post.author[0];
+        return post;
+    });
+}
