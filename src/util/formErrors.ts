@@ -25,6 +25,11 @@ export interface FormErrors {
     hasErrors(): boolean;
 
     /**
+     * Checks if there are any new (errors that have been added by this object) errors.
+     */
+    hasNewErrors(): boolean;
+
+    /**
      * Returns the number of active errors.
      */
     countErrors(): number;
@@ -35,6 +40,7 @@ export class SessionFormErrors implements FormErrors {
     private size: number = 0;
     private readonly request: Request;
     private readonly key: string;
+    private newErrors: boolean = false;
 
     constructor(request: Request, sessionKey: string) {
         this.request = request;
@@ -65,9 +71,15 @@ export class SessionFormErrors implements FormErrors {
         return this.size > 0;
     }
 
+    hasNewErrors(): boolean {
+        return false;
+    }
+
+
     clearAll(): void {
         this.request.session[this.key] = {};
         this.size = 0;
+        this.newErrors = false;
     }
 
     pushError(field: string, error: string): void {
@@ -77,6 +89,7 @@ export class SessionFormErrors implements FormErrors {
 
         this.request.session[this.key][field].push(error);
         this.size++;
+        this.newErrors = true;
     }
 }
 
