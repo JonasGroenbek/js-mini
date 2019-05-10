@@ -71,6 +71,7 @@
         const mde = new SimpleMDE();
         mde.codemirror.on("change", function () {
             submit.content = mde.value();
+            console.log(submit.content);
         });
 
         const form = document.getElementById("form");
@@ -87,7 +88,12 @@
 
             Object.keys(submit).forEach(key => {
                 const value = submit[key];
-                const input = document.createElement('input');
+                let input = null;
+                if (key === 'content')
+                    input = document.createElement('textarea');
+                else
+                    input = document.createElement('input');
+
                 input.name = key;
                 if (Array.isArray(value))
                     input.value = value.join(";;");

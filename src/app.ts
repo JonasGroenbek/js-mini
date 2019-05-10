@@ -11,6 +11,8 @@ import router from "./controllers/router";
 import session from "express-session";
 import {handlebarsErrorHandler} from "./util/formErrors";
 import {messengerRenderer} from "./util/messenger";
+import {handlebarsMarkdown} from "./util/markdown";
+import {handlebarsPositionHelper} from "./util/handlebarsPositionHelper";
 
 const app = express();
 
@@ -23,6 +25,8 @@ app.engine("hbs", hbs({
     partialsDir: path.join(__dirname + "/../views/partials"),
     helpers: {
         formErrors: handlebarsErrorHandler,
+        markdown: handlebarsMarkdown,
+        position: handlebarsPositionHelper,
         messengerRenderer
     }
 }));

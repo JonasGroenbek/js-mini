@@ -27,6 +27,7 @@
     "watch-debug": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-sass\" \"npm run watch-ts\" \"npm run serve-debug\""
   },
   "dependencies": {
+    "@types/showdown": "^1.9.2",
     "async": "^2.6.2",
     "bcrypt": "^3.0.5",
     "bcrypt-nodejs": "^0.0.3",
@@ -50,6 +51,7 @@
     "nodemailer": "^4.7.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
+    "showdown": "^1.9.0",
     "stack-trace": "0.0.10",
     "winston": "^2.4.4"
   },

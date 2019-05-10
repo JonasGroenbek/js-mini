@@ -8,45 +8,39 @@
         <div class="row">
             <div class="col s12 post panel pad">
                 <h3 class="title">{{this.title}}</h3>
-                <p class="created">{{this.created}}</p>
-                <p class="author">{{this.author.firstName}} {{this.author.lastName}}</p>
-                <div class="content">
-                    {{this.content}}
+                <div class="details" style="margin-bottom: 20px">
+                    <p class="created">{{this.created}}</p>
+                    <p class="author">{{this.author.firstName}} {{this.author.lastName}}</p>
+                    <p class="position">{{position this.position}}</p>
+                </div>
+                <div class="content text">
+                    {{markdown this.content}}
                 </div>
 
                 <!-- Slider main container -->
-                <div class="swiper-container">
+                <div class="swiper-container" style="margin-top: 20px">
                     <!-- Additional required wrapper -->
                     <div class="swiper-wrapper">
                         <!-- Slides -->
 
                         {{#each this.images}}
                             <div class="swiper-slide" style="text-align: center">
-                                <img alt="location image" src="{{{this}}}"/>
+                                <img alt="location image" style="max-width: 100%" src="{{{this}}}"/>
                             </div>
 
                         {{/each}}
                         ...
                     </div>
-                    <!-- If we need pagination -->
-                    <div class="swiper-pagination"></div>
 
                     <!-- If we need navigation buttons -->
                     <div class="swiper-button-prev"></div>
                     <div class="swiper-button-next"></div>
 
-                    <!-- If we need scrollbar -->
-                    <div class="swiper-scrollbar"></div>
                 </div>
                 <script>
                     var mySwiper = new Swiper('.swiper-container', {
                         // Optional parameters
                         direction: 'vertical',
-
-                        // If we need pagination
-                        pagination: {
-                            el: '.swiper-pagination',
-                        },
 
                         // Navigation arrows
                         navigation: {
