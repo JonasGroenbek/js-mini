@@ -14,13 +14,53 @@
                     {{this.content}}
                 </div>
 
-                <ul class="images">
-                    {{#each this.images}}
-                        <li>
-                            <img alt="location image" src="{{{this}}}"/>
-                        </li>
-                    {{/each}}
-                </ul>
+                <!-- Slider main container -->
+                <div class="swiper-container">
+                    <!-- Additional required wrapper -->
+                    <div class="swiper-wrapper">
+                        <!-- Slides -->
+
+                        {{#each this.images}}
+                            <div class="swiper-slide" style="text-align: center">
+                                <img alt="location image" src="{{{this}}}"/>
+                            </div>
+
+                        {{/each}}
+                        ...
+                    </div>
+                    <!-- If we need pagination -->
+                    <div class="swiper-pagination"></div>
+
+                    <!-- If we need navigation buttons -->
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+
+                    <!-- If we need scrollbar -->
+                    <div class="swiper-scrollbar"></div>
+                </div>
+                <script>
+                    var mySwiper = new Swiper('.swiper-container', {
+                        // Optional parameters
+                        direction: 'vertical',
+
+                        // If we need pagination
+                        pagination: {
+                            el: '.swiper-pagination',
+                        },
+
+                        // Navigation arrows
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                        },
+                    })
+                </script>
+                <style>
+                    .swiper-container {
+                        width: 100%;
+                        height: 500px;
+                    }
+                </style>
             </div>
         </div>
     {{/each}}
