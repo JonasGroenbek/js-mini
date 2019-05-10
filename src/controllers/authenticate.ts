@@ -12,7 +12,6 @@ const router = express.Router();
 router.use(bodyParser.urlencoded({extended: true}));
 
 // Renders the authentication page.
-// @ts-ignore
 router.get("/", async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
     await attempt(next, function () {
         res.render("authenticate", {
@@ -23,7 +22,6 @@ router.get("/", async function (req: Request, res: Response, next: (err: Applica
 });
 
 // Accepts form information sent by the authentication page.
-// @ts-ignore
 router.post("/", async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
     await attempt(next, async function () {
 

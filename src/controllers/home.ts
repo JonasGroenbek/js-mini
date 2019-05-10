@@ -4,10 +4,6 @@ import {sessionAuthentication} from "../auth/authenticationMiddleware";
 import BlogPostModel from "../data/BlogPost";
 import {sessionMessenger} from "../util/messenger";
 
-async function getBlogPosts() {
-    return BlogPostModel.find({}).sort({created: -1}).exec();
-}
-
 // Renders the home page.
 export default async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
     await attempt(next, async function () {
@@ -16,5 +12,23 @@ export default async function (req: Request, res: Response, next: (err: Applicat
             messenger: sessionMessenger(req),
             posts: await getBlogPosts()
         });
+    });
+}
+
+async function getBlogPosts() {
+    const results = await BlogPostModel.aggregate([{
+        $lookup: {
+            from: "users",
+            localField: "author",
+            foreignField: "_id",
+            as: "author"
+        }
+    }])
+        .sort({created: -1})
+        .exec();
+
+    return results.map((post: any) => {
+        post.author = post.author[0];
+        return post;
     });
 }

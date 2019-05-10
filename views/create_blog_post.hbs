@@ -1,7 +1,6 @@
 {{>head}}
 <h2>Create Post</h2>
 <div class="row panel pad">
-    {{formErrors formErrors.form}}
     <div class="col s12">
         <div class="row" style="margin-top: 18px">
             {{formErrors formErrors.title}}
@@ -56,6 +55,7 @@
             }
 
         </style>
+        {{formErrors formErrors.position}}
         <div style="height: 500px; width: 100%" class="panel pad" id="map"></div>
         <div class="row">
             <div class="input-field col s12">

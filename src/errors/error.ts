@@ -99,7 +99,7 @@ export async function attempt(next: (err: ApplicationError) => any, perform: () 
         if (e instanceof ApplicationErrorBase)
             return next(e);
         if (e instanceof Error)
-            return next(new ApplicationErrorBase("GeneralError", "An error occurred", 500, e, stacktrace.parse(e)));
+            return next(new ApplicationErrorBase("GeneralError", e.message, 500, e, stacktrace.parse(e)));
         if (typeof e === "string")
             return next(new ApplicationErrorBase("GeneralError", e, 500, undefined, undefined));
 

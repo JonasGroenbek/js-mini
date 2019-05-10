@@ -117,7 +117,7 @@ export class SessionMessenger implements Messenger {
 }
 
 const defaults = {
-    displayLength: 40000, // TODO: set back to 4000
+    displayLength: 5000,
     inDuration: 300,
     outDuration: 375,
     classes: "message ",
