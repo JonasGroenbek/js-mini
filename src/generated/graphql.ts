@@ -15,10 +15,15 @@ export type GraphAdditionalEntityFields = {
 
 export type GraphMutation = {
   createPost: GraphPost;
+  deletePost: GraphPost;
 };
 
 export type GraphMutationCreatePostArgs = {
   input: GraphPostInput;
+};
+
+export type GraphMutationDeletePostArgs = {
+  identifier: Scalars["ID"];
 };
 
 export type GraphPost = {
@@ -253,6 +258,12 @@ export type GraphMutationResolvers<
     ParentType,
     ContextType,
     GraphMutationCreatePostArgs
+  >;
+  deletePost?: Resolver<
+    GraphResolversTypes["Post"],
+    ParentType,
+    ContextType,
+    GraphMutationDeletePostArgs
   >;
 };
 

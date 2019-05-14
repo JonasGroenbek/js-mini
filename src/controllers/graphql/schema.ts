@@ -63,5 +63,6 @@ type Query {
 
 type Mutation {
     createPost(input: PostInput!): Post!
+    deletePost(identifier: ID!): Post!
 }
 `);

@@ -19,10 +19,10 @@ PostSchema.virtual("likedByCount", function () {
 export interface Post extends Document {
     title: string;
     content: string;
-    images: [string];
+    images: string[];
     author: User;
     likedBy: [User];
-    position: [number];
+    position: number[];
     created: Date;
 
     likedByCount(): number;

@@ -1,5 +1,6 @@
 import UserModel, {User} from "../../../data/User";
 import {GraphQueryGetUserByIdArgs, GraphUser} from "../../../generated/graphql";
+import {Request} from "express";
 
 export function converter(model: User): GraphUser {
 
@@ -12,7 +13,8 @@ export function converter(model: User): GraphUser {
     };
 }
 
-export async function getUsers(): Promise<GraphUser[]> {
+export async function getUsers(input: {}, request: Request): Promise<GraphUser[]> {
+
     return (await UserModel.find({}).lean().exec()).map(converter);
 }
 

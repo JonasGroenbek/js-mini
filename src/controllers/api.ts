@@ -2,12 +2,14 @@ import express from "express";
 import {restRouter} from "../auth/controller";
 import {restHandler} from "../errors/handlers";
 import {restAuthenticationRouterOptions} from "../util/configuration";
-import grapqlRouter from "./graphql/route";
+import graphqlRouter from "./graphql/router";
+import cors from "cors";
 
 const router = express.Router();
 
+router.use(cors());
 router.use("/account", restRouter(restAuthenticationRouterOptions));
-router.use("/graphql", grapqlRouter({graphiql: true}));
+router.use("/graphql", graphqlRouter({graphiql: true}));
 router.use(restHandler({}));
 
 export default router;
