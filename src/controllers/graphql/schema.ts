@@ -20,7 +20,7 @@ input BlogPostInput {
 }
 
 type BlogPost {
-    id: ID!
+    _id: ID!
     content: String!
     images: [String!]!
     position: BlogPostPosition!
@@ -35,7 +35,7 @@ input UserPositionInput {
 }
 
 type UserPosition {
-    id: ID!
+    _id: ID!
     user: User!
     location: [Int!]!
     created: String!
@@ -49,7 +49,7 @@ input UserInput {
 }
 
 type User {
-    id: ID!
+    _id: ID!
     firstName: String!,
     lastName: String!
     email: String!

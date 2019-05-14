@@ -3,7 +3,7 @@ import UserModel from "../data/User";
 import mongooseConnect from "./mongooseConnect";
 import DefaultJsonWebTokenService, {getSecretFromConfig, JsonWebTokenServiceOptions} from "../auth/jsonWebToken";
 import MongoAuthenticationRepository from "../auth/MongoAuthenticationRepository";
-import {createRestAuthenticationOptions} from "../auth/router";
+import {createRestAuthenticationOptions} from "../auth/controller";
 
 mongooseConnect();
 
