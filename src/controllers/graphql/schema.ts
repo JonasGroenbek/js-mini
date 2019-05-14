@@ -2,28 +2,28 @@ import {buildSchema} from "graphql";
 
 export default buildSchema(`
 
-input BlogPostPositionInput {
+input PostPositionInput {
     longitude: Float!
     latitude: Float!
 }
 
-type BlogPostPosition {
+type PostPosition {
     longitude: Float!
     latitude: Float!
 }
 
-input BlogPostInput {
+input PostInput {
     content: String!
     images: [String!]
-    position: BlogPostPositionInput!
+    position: PostPositionInput!
     author: ID!
 }
 
-type BlogPost {
+type Post {
     identifier: ID!
     content: String!
     images: [String!]!
-    position: BlogPostPosition!
+    position: PostPosition!
     author: User!
     created: String!
 }
@@ -55,13 +55,13 @@ type User {
 }
 
 type Query {
-    getPosts: [BlogPost]
-    getPostById(identifier: ID!): BlogPost
+    getPosts: [Post]
+    getPostById(identifier: ID!): Post
     getUsers: [User]
     getUserById(identifier: ID!): User
 }
 
 type Mutation {
-    createPost(input: BlogPostInput!): BlogPost!
+    createPost(input: PostInput!): Post!
 }
 `);

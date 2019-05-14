@@ -13,43 +13,43 @@ export type GraphAdditionalEntityFields = {
   type?: Maybe<Scalars["String"]>;
 };
 
-export type GraphBlogPost = {
+export type GraphPost = {
   identifier: Scalars["ID"];
   content: Scalars["String"];
   images: Array<Scalars["String"]>;
-  position: GraphBlogPostPosition;
+  position: GraphPostPosition;
   author: GraphUser;
   created: Scalars["String"];
 };
 
-export type GraphBlogPostInput = {
+export type GraphPostInput = {
   content: Scalars["String"];
   images?: Maybe<Array<Scalars["String"]>>;
-  position: GraphBlogPostPositionInput;
+  position: GraphPostPositionInput;
   author: Scalars["ID"];
 };
 
-export type GraphBlogPostPosition = {
+export type GraphPostPosition = {
   longitude: Scalars["Float"];
   latitude: Scalars["Float"];
 };
 
-export type GraphBlogPostPositionInput = {
+export type GraphPostPositionInput = {
   longitude: Scalars["Float"];
   latitude: Scalars["Float"];
 };
 
 export type GraphMutation = {
-  createPost: GraphBlogPost;
+  createPost: GraphPost;
 };
 
 export type GraphMutationCreatePostArgs = {
-  input: GraphBlogPostInput;
+  input: GraphPostInput;
 };
 
 export type GraphQuery = {
-  getPosts?: Maybe<Array<Maybe<GraphBlogPost>>>;
-  getPostById?: Maybe<GraphBlogPost>;
+  getPosts?: Maybe<Array<Maybe<GraphPost>>>;
+  getPostById?: Maybe<GraphPost>;
   getUsers?: Maybe<Array<Maybe<GraphUser>>>;
   getUserById?: Maybe<GraphUser>;
 };
@@ -162,15 +162,15 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type GraphResolversTypes = {
   Query: {};
-  BlogPost: GraphBlogPost;
+  Post: GraphPost;
   ID: Scalars["ID"];
   String: Scalars["String"];
-  BlogPostPosition: GraphBlogPostPosition;
+  PostPosition: GraphPostPosition;
   Float: Scalars["Float"];
   User: GraphUser;
   Mutation: {};
-  BlogPostInput: GraphBlogPostInput;
-  BlogPostPositionInput: GraphBlogPostPositionInput;
+  PostInput: GraphPostInput;
+  PostPositionInput: GraphPostPositionInput;
   Boolean: Scalars["Boolean"];
   UserInput: GraphUserInput;
   UserPosition: GraphUserPosition;
@@ -244,9 +244,9 @@ export type GraphMapDirectiveResolver<
   Args = { path?: Maybe<Scalars["String"]> }
 > = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
-export type GraphBlogPostResolvers<
+export type GraphPostResolvers<
   ContextType = any,
-  ParentType = GraphResolversTypes["BlogPost"]
+  ParentType = GraphResolversTypes["Post"]
 > = {
   identifier?: Resolver<GraphResolversTypes["ID"], ParentType, ContextType>;
   content?: Resolver<GraphResolversTypes["String"], ParentType, ContextType>;
@@ -256,7 +256,7 @@ export type GraphBlogPostResolvers<
     ContextType
   >;
   position?: Resolver<
-    GraphResolversTypes["BlogPostPosition"],
+    GraphResolversTypes["PostPosition"],
     ParentType,
     ContextType
   >;
@@ -264,9 +264,9 @@ export type GraphBlogPostResolvers<
   created?: Resolver<GraphResolversTypes["String"], ParentType, ContextType>;
 };
 
-export type GraphBlogPostPositionResolvers<
+export type GraphPostPositionResolvers<
   ContextType = any,
-  ParentType = GraphResolversTypes["BlogPostPosition"]
+  ParentType = GraphResolversTypes["PostPosition"]
 > = {
   longitude?: Resolver<GraphResolversTypes["Float"], ParentType, ContextType>;
   latitude?: Resolver<GraphResolversTypes["Float"], ParentType, ContextType>;
@@ -277,7 +277,7 @@ export type GraphMutationResolvers<
   ParentType = GraphResolversTypes["Mutation"]
 > = {
   createPost?: Resolver<
-    GraphResolversTypes["BlogPost"],
+    GraphResolversTypes["Post"],
     ParentType,
     ContextType,
     GraphMutationCreatePostArgs
@@ -289,12 +289,12 @@ export type GraphQueryResolvers<
   ParentType = GraphResolversTypes["Query"]
 > = {
   getPosts?: Resolver<
-    Maybe<Array<Maybe<GraphResolversTypes["BlogPost"]>>>,
+    Maybe<Array<Maybe<GraphResolversTypes["Post"]>>>,
     ParentType,
     ContextType
   >;
   getPostById?: Resolver<
-    Maybe<GraphResolversTypes["BlogPost"]>,
+    Maybe<GraphResolversTypes["Post"]>,
     ParentType,
     ContextType,
     GraphQueryGetPostByIdArgs
@@ -337,8 +337,8 @@ export type GraphUserPositionResolvers<
 };
 
 export type GraphResolvers<ContextType = any> = {
-  BlogPost?: GraphBlogPostResolvers<ContextType>;
-  BlogPostPosition?: GraphBlogPostPositionResolvers<ContextType>;
+  Post?: GraphPostResolvers<ContextType>;
+  PostPosition?: GraphPostPositionResolvers<ContextType>;
   Mutation?: GraphMutationResolvers<ContextType>;
   Query?: GraphQueryResolvers<ContextType>;
   User?: GraphUserResolvers<ContextType>;

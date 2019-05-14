@@ -1,7 +1,7 @@
 import mongoose, {Schema, Document} from "mongoose";
 import {User} from "./User";
 
-export const BlogPostSchema = new Schema({
+export const PostSchema = new Schema({
     content: {type: String, required: true},
     title: {type: Schema.Types.String, required: true},
     images: [String],
@@ -11,12 +11,12 @@ export const BlogPostSchema = new Schema({
     created: {type: Date, default: Date.now},
 });
 
-BlogPostSchema.virtual("likedByCount", function () {
+PostSchema.virtual("likedByCount", function () {
     // @ts-ignore
     return this.likedBy.length;
 });
 
-export interface BlogPost extends Document {
+export interface Post extends Document {
     title: string;
     content: string;
     images: [string];
@@ -28,11 +28,11 @@ export interface BlogPost extends Document {
     likedByCount(): number;
 }
 
-const Model = mongoose.model<BlogPost>("BlogPost", BlogPostSchema);
+const Model = mongoose.model<Post>("Post", PostSchema);
 
 export default Model;
 
-export async function getBlogPosts() {
+export async function getPosts() {
 
     const results = await Model.aggregate([{
         $lookup: {

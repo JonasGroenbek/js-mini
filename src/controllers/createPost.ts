@@ -1,7 +1,7 @@
 import express, {Request, Response} from "express";
 import {ApplicationError, attempt} from "../errors/error";
 import bodyParser from "body-parser";
-import BlogPostModel from "../data/BlogPost";
+import PostModel from "../data/Post";
 import {sessionAuthentication} from "../auth/authenticationMiddleware";
 import {FormErrors, sessionFormErrors} from "../util/formErrors";
 import {sessionMessenger} from "../util/messenger";
@@ -19,7 +19,7 @@ router.get("/", async function (req: Request, res: Response, next: (err: Applica
     });
 });
 
-function validateBlogPost(form: FormErrors, body: any): void {
+function validatePost(form: FormErrors, body: any): void {
 
     const {title, content, latitude, longitude} = body;
 
@@ -39,7 +39,7 @@ router.post("/", async function (req: Request, res: Response, next: (err: Applic
 
         // validate request
         const formErrors = sessionFormErrors(req);
-        validateBlogPost(formErrors, req.body);
+        validatePost(formErrors, req.body);
         if (formErrors.hasNewErrors()) {
             res.redirect("create-blog");
             return;
@@ -47,7 +47,7 @@ router.post("/", async function (req: Request, res: Response, next: (err: Applic
 
         try {
 
-            await BlogPostModel.create({
+            await PostModel.create({
                 title: req.body.title,
                 content: req.body.content,
                 images: req.body.images.split(";;").filter((e: string) => e.length > 0),

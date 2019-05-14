@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {ApplicationError, attempt} from "../errors/error";
 import {sessionAuthentication} from "../auth/authenticationMiddleware";
-import {getBlogPosts} from "../data/BlogPost";
+import {getPosts} from "../data/Post";
 import {sessionMessenger} from "../util/messenger";
 
 // Renders the home page.
@@ -10,7 +10,7 @@ export default async function (req: Request, res: Response, next: (err: Applicat
         res.render("home", {
             authenticatedUser: sessionAuthentication(req).getAuthenticatedUser(),
             messenger: sessionMessenger(req),
-            posts: await getBlogPosts()
+            posts: await getPosts()
         });
     });
 }
