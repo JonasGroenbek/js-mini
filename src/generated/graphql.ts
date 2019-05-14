@@ -13,6 +13,14 @@ export type GraphAdditionalEntityFields = {
   type?: Maybe<Scalars["String"]>;
 };
 
+export type GraphMutation = {
+  createPost: GraphPost;
+};
+
+export type GraphMutationCreatePostArgs = {
+  input: GraphPostInput;
+};
+
 export type GraphPost = {
   identifier: Scalars["ID"];
   content: Scalars["String"];
@@ -23,10 +31,10 @@ export type GraphPost = {
 };
 
 export type GraphPostInput = {
+  title: Scalars["String"];
   content: Scalars["String"];
   images?: Maybe<Array<Scalars["String"]>>;
   position: GraphPostPositionInput;
-  author: Scalars["ID"];
 };
 
 export type GraphPostPosition = {
@@ -37,14 +45,6 @@ export type GraphPostPosition = {
 export type GraphPostPositionInput = {
   longitude: Scalars["Float"];
   latitude: Scalars["Float"];
-};
-
-export type GraphMutation = {
-  createPost: GraphPost;
-};
-
-export type GraphMutationCreatePostArgs = {
-  input: GraphPostInput;
 };
 
 export type GraphQuery = {
@@ -244,6 +244,18 @@ export type GraphMapDirectiveResolver<
   Args = { path?: Maybe<Scalars["String"]> }
 > = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
+export type GraphMutationResolvers<
+  ContextType = any,
+  ParentType = GraphResolversTypes["Mutation"]
+> = {
+  createPost?: Resolver<
+    GraphResolversTypes["Post"],
+    ParentType,
+    ContextType,
+    GraphMutationCreatePostArgs
+  >;
+};
+
 export type GraphPostResolvers<
   ContextType = any,
   ParentType = GraphResolversTypes["Post"]
@@ -270,18 +282,6 @@ export type GraphPostPositionResolvers<
 > = {
   longitude?: Resolver<GraphResolversTypes["Float"], ParentType, ContextType>;
   latitude?: Resolver<GraphResolversTypes["Float"], ParentType, ContextType>;
-};
-
-export type GraphMutationResolvers<
-  ContextType = any,
-  ParentType = GraphResolversTypes["Mutation"]
-> = {
-  createPost?: Resolver<
-    GraphResolversTypes["Post"],
-    ParentType,
-    ContextType,
-    GraphMutationCreatePostArgs
-  >;
 };
 
 export type GraphQueryResolvers<
@@ -337,9 +337,9 @@ export type GraphUserPositionResolvers<
 };
 
 export type GraphResolvers<ContextType = any> = {
+  Mutation?: GraphMutationResolvers<ContextType>;
   Post?: GraphPostResolvers<ContextType>;
   PostPosition?: GraphPostPositionResolvers<ContextType>;
-  Mutation?: GraphMutationResolvers<ContextType>;
   Query?: GraphQueryResolvers<ContextType>;
   User?: GraphUserResolvers<ContextType>;
   UserPosition?: GraphUserPositionResolvers<ContextType>;

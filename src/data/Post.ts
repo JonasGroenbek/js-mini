@@ -9,7 +9,7 @@ export const PostSchema = new Schema({
     position: {type: [Schema.Types.Number], index: "2dsphere"},
     likedBy: [{type: Schema.Types.ObjectId, ref: "User"}],
     created: {type: Date, default: Date.now},
-});
+}, {collection: "blogposts"});
 
 PostSchema.virtual("likedByCount", function () {
     // @ts-ignore
@@ -22,7 +22,7 @@ export interface Post extends Document {
     images: [string];
     author: User;
     likedBy: [User];
-    position: { longitude: number, latitude: number };
+    position: [number];
     created: Date;
 
     likedByCount(): number;

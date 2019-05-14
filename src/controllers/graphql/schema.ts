@@ -13,10 +13,10 @@ type PostPosition {
 }
 
 input PostInput {
+    title: String!
     content: String!
     images: [String!]
     position: PostPositionInput!
-    author: ID!
 }
 
 type Post {
