@@ -20,13 +20,12 @@ input BlogPostInput {
 }
 
 type BlogPost {
-    id: ID!
+    identifier: ID!
     content: String!
     images: [String!]!
     position: BlogPostPosition!
     author: User!
     created: String!
-    updated: String!
 }
 
 input UserPositionInput {
@@ -35,7 +34,7 @@ input UserPositionInput {
 }
 
 type UserPosition {
-    id: ID!
+    identifier: ID!
     user: User!
     location: [Int!]!
     created: String!
@@ -49,20 +48,20 @@ input UserInput {
 }
 
 type User {
-    id: ID!
+    identifier: ID!
     firstName: String!,
     lastName: String!
     email: String!
 }
 
 type Query {
-    getBlogPosts: [BlogPost]
-    getBlogPost(id: ID!): BlogPost
+    getPosts: [BlogPost]
+    getPostById(identifier: ID!): BlogPost
     getUsers: [User]
-    getUser(id: ID!): User
+    getUserById(identifier: ID!): User
 }
 
 type Mutation {
-    createBlogPost(input: BlogPostInput!): BlogPost!
+    createPost(input: BlogPostInput!): BlogPost!
 }
 `);

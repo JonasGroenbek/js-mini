@@ -9,7 +9,6 @@ export const BlogPostSchema = new Schema({
     position: {type: [Schema.Types.Number], index: "2dsphere"},
     likedBy: [{type: Schema.Types.ObjectId, ref: "User"}],
     created: {type: Date, default: Date.now},
-    updated: Date
 });
 
 BlogPostSchema.virtual("likedByCount", function () {
@@ -23,9 +22,8 @@ export interface BlogPost extends Document {
     images: [string];
     author: User;
     likedBy: [User];
-    position: { longitude: Number, latitude: Number };
+    position: { longitude: number, latitude: number };
     created: Date;
-    updated: Date;
 
     likedByCount(): number;
 }

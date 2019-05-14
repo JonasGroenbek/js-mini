@@ -1,10 +1,10 @@
-import {getUsers, getUser} from "./resolvers/users";
-import {getBlogPosts, getBlogPost, createBlogPost} from "./resolvers/blogPosts";
+import {getUsers, getUserById} from "./resolvers/users";
+import {getPosts, getPostById, createPost} from "./resolvers/posts";
 
 export default {
     getUsers,
-    getUser,
-    getBlogPosts,
-    getBlogPost,
-    createBlogPost
+    getUserById,
+    getPosts,
+    getPostById,
+    createPost
 };

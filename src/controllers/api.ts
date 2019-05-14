@@ -1,5 +1,5 @@
 import express from "express";
-import {restRouter} from "../auth/router";
+import {restRouter} from "../auth/controller";
 import {restHandler} from "../errors/handlers";
 import {restAuthenticationRouterOptions} from "../util/configuration";
 import grapqlRouter from "./graphql/route";
