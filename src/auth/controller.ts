@@ -49,7 +49,7 @@ export function restRouter<T extends AuthenticatableUser>(options: RestAuthentic
     async function restRegistration(req: Request, res: Response, next: (err: ApplicationError) => void) {
         await attempt(next, async function () {
             validator.validateOrThrow(req.body, UserValidationSchema);
-            const user = await options.authenticationProvider.register(createAuthenticatableUser(req.body, "email", "password"));
+            const user = await options.authenticationProvider.register(createAuthenticatableUser(req.body, options.identifierKey, options.passwordKey));
             const token = await options.jsonWebTokenService.encode(user);
             options.renderer(req, res, next, token, user);
         });

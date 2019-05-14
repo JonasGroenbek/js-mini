@@ -1,8 +1,9 @@
-import BlogPostModel from "../../../data/BlogPost";
+import BlogPostModel, {BlogPost} from "../../../data/BlogPost";
 import UserModel from "../../../data/User";
+import {getBlogPosts as retrieveBlogPosts} from "../../../data/BlogPost";
 
 export async function getBlogPosts() {
-    return await BlogPostModel.find().exec();
+    return (await retrieveBlogPosts()).map(converter);
 }
 
 export async function getBlogPost(args: { id: string }) {
@@ -13,4 +14,13 @@ export async function getBlogPost(args: { id: string }) {
 
 export async function createBlogPost(args: { input: {} }) {
     return await BlogPostModel.create(args.input);
+}
+
+function converter(post: BlogPost) {
+    post.position = {
+        // @ts-ignore
+        longitude: post.position[0],
+        // @ts-ignore
+        latitude: post.position[1]
+    };
 }
