@@ -5,6 +5,7 @@ import {JsonWebTokenService} from "./jsonWebToken";
 import {ApplicationError, attempt} from "../errors/error";
 import validator from "../errors/validation";
 import {UserValidationSchema} from "../data/User";
+import {converter} from "../controllers/facades/UserFacade";
 
 export type RestAuthenticationOptions<T extends AuthenticatableUser> = {
     identifierKey?: string,
@@ -17,7 +18,8 @@ export type RestAuthenticationOptions<T extends AuthenticatableUser> = {
 };
 
 export function jsonRenderer<T>(req: Request, res: Response, next: (err: Error) => void, token: string, user: T) {
-    res.json({token, user});
+    // @ts-ignore
+    res.json({token, user: converter(user)});
 }
 
 export function createRestAuthenticationOptions<T extends AuthenticatableUser>(config: RestAuthenticationOptions<T>): RestAuthenticationOptions<T> {
