@@ -30,15 +30,15 @@ type Post {
 }
 
 input UserPositionInput {
-    user: ID!
-    location: [Int!]!
+    latitude: Float!
+    longitude: Float!
 }
 
 type UserPosition {
-    identifier: ID!
     user: User!
-    location: [Int!]!
-    created: String!
+    latitude: Float!
+    longitude: Float!
+    timestamp: String!
 }
 
 input UserInput {
@@ -60,6 +60,8 @@ type Query {
     getPostById(identifier: ID!): Post
     getUsers: [User]
     getUserById(identifier: ID!): User
+    getUserPosition(user: ID!): UserPosition
+    getNearbyUsers(radiusMeters: Int!): [UserPosition!]!
 }
 
 type Mutation {
@@ -67,5 +69,7 @@ type Mutation {
     deletePost(post: ID!): Post
     likePost(post: ID!): Post
     unlikePost(post: ID!): Post
+
+    updateOwnPosition(longitude: Float!, latitude: Float!): UserPosition!
 }
 `);

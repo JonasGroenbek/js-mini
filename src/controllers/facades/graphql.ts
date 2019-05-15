@@ -13,6 +13,7 @@ export type GraphMutation = {
   deletePost?: Maybe<GraphPost>;
   likePost?: Maybe<GraphPost>;
   unlikePost?: Maybe<GraphPost>;
+  updateOwnPosition: GraphUserPosition;
 };
 
 export type GraphMutationCreatePostArgs = {
@@ -29,6 +30,11 @@ export type GraphMutationLikePostArgs = {
 
 export type GraphMutationUnlikePostArgs = {
   post: Scalars["ID"];
+};
+
+export type GraphMutationUpdateOwnPositionArgs = {
+  longitude: Scalars["Float"];
+  latitude: Scalars["Float"];
 };
 
 export type GraphPost = {
@@ -63,6 +69,8 @@ export type GraphQuery = {
   getPostById?: Maybe<GraphPost>;
   getUsers?: Maybe<Array<Maybe<GraphUser>>>;
   getUserById?: Maybe<GraphUser>;
+  getUserPosition?: Maybe<GraphUserPosition>;
+  getNearbyUsers: Array<GraphUserPosition>;
 };
 
 export type GraphQueryGetPostByIdArgs = {
@@ -71,6 +79,14 @@ export type GraphQueryGetPostByIdArgs = {
 
 export type GraphQueryGetUserByIdArgs = {
   identifier: Scalars["ID"];
+};
+
+export type GraphQueryGetUserPositionArgs = {
+  user: Scalars["ID"];
+};
+
+export type GraphQueryGetNearbyUsersArgs = {
+  radiusMeters: Scalars["Int"];
 };
 
 export type GraphUser = {
@@ -88,13 +104,13 @@ export type GraphUserInput = {
 };
 
 export type GraphUserPosition = {
-  identifier: Scalars["ID"];
   user: GraphUser;
-  location: Array<Scalars["Int"]>;
-  created: Scalars["String"];
+  latitude: Scalars["Float"];
+  longitude: Scalars["Float"];
+  timestamp: Scalars["String"];
 };
 
 export type GraphUserPositionInput = {
-  user: Scalars["ID"];
-  location: Array<Scalars["Int"]>;
+  latitude: Scalars["Float"];
+  longitude: Scalars["Float"];
 };

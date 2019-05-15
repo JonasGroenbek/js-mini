@@ -53,6 +53,9 @@ export default class PostFacade {
 }
 
 export async function convertOne(post: Post): Promise<GraphPost> {
+    if (!post)
+        return undefined;
+
     return (await convertMany([post]))[0];
 }
 
