@@ -1,84 +1,33 @@
-import PostModel, {Post} from "../../../data/Post";
-import {converter as userConverter} from "./users";
-import UserModel, {User} from "../../../data/User";
 import authentication from "../authentication";
+import PostFacade from "../../facades/PostFacade";
 import {Request} from "express";
-
 import {
     GraphPost,
     GraphMutationCreatePostArgs,
-    GraphQueryGetPostByIdArgs, GraphMutationDeletePostArgs, GraphMutationLikePostArgs
-} from "../../../generated/graphql";
-import {Types} from "mongoose";
-
-export async function convertOne(post: Post): Promise<GraphPost> {
-    return (await convertMany([post]))[0];
-}
-
-export async function convertMany(posts: Post[]): Promise<GraphPost[]> {
-
-    if (posts.length < 1)
-        return [];
-
-    const usersToRetrieve = posts.reduce((acc, post) => {
-        acc.add(post.author);
-        post.likedBy.forEach(v => acc.add(v));
-        return acc;
-    }, new Set<Types.ObjectId>());
-
-    const retrievedUsers = (await UserModel.find({
-        _id: {
-            $in: Array.from(usersToRetrieve)
-        }
-    }).lean().exec()).reduce((acc: { [key: string]: User }, u: User) => {
-        acc[u._id.toHexString()] = u;
-        return acc;
-    }, {});
-
-    return posts.map(post => (
-        {
-            ...post,
-            identifier: post._id,
-            position: {
-                longitude: post.position[0],
-                latitude: post.position[1]
-            },
-            likedBy: post.likedBy.map(userId => userConverter(retrievedUsers[userId.toHexString()])),
-            author: userConverter(retrievedUsers[post.author.toHexString()]),
-            created: post.created.toDateString()
-        }));
-}
+    GraphQueryGetPostByIdArgs,
+    GraphMutationDeletePostArgs,
+    GraphMutationLikePostArgs
+} from "../../facades/graphql";
 
 export async function getPosts(): Promise<GraphPost[]> {
-    return convertMany(await PostModel.find({}).exec());
+    return PostFacade.getPosts();
 }
 
-export async function getPostById(args: GraphQueryGetPostByIdArgs): Promise<GraphPost> {
-    const post = await PostModel.findById(args.identifier).lean().exec();
-    if (!post)
-        return undefined;
-
-    return convertOne(post);
+export async function getPostById(args: GraphQueryGetPostByIdArgs) {
+    return PostFacade.getPostById(args.identifier);
 }
 
-export async function createPost(args: GraphMutationCreatePostArgs, request: Request): Promise<GraphPost> {
+export async function createPost(args: GraphMutationCreatePostArgs, request: Request) {
 
     const authenticatedUser = await authentication(request);
 
-    const toCreate = {
-        ...args.input,
-        author: authenticatedUser._id,
-        position: [args.input.position.longitude, args.input.position.latitude]
-    };
-
-    const post = await PostModel.create(toCreate);
-    return convertOne(post);
+    return PostFacade.createPost(args.input, authenticatedUser._id);
 }
 
-export async function deletePost(args: GraphMutationDeletePostArgs, request: Request): Promise<GraphPost> {
+export async function deletePost(args: GraphMutationDeletePostArgs, request: Request) {
 
     const authenticatedUser = await authentication(request);
-    const found = await PostModel.findById(args.identifier).lean().exec();
+    const found = await PostFacade.getPostById(args.post);
 
     if (!found)
         throw new Error("No post with the provided identifier exists.");
@@ -86,27 +35,19 @@ export async function deletePost(args: GraphMutationDeletePostArgs, request: Req
     if (found.author != authenticatedUser._id)
         throw new Error("You cannot delete posts belonging to other users.");
 
-    return convertOne(await PostModel.findByIdAndDelete(args.identifier).lean().exec());
+    return PostFacade.deletePost(args.post);
 }
 
-export async function likePost(args: GraphMutationLikePostArgs, request: Request): Promise<GraphPost> {
+export async function likePost(args: GraphMutationLikePostArgs, request: Request) {
 
     const authenticatedUser = await authentication(request);
-    const pull = await PostModel.findOneAndUpdate({_id: args.identifier}, {$pull: {likedBy: authenticatedUser._id}}, {new: true}).exec();
-    const push = await PostModel.findOneAndUpdate({_id: args.identifier}, {$push: {likedBy: authenticatedUser._id}}, {new: true}).exec();
 
-    if (!pull || !push)
-        throw new Error("No post with the provided identifier exists.");
-
-    return convertOne(push);
+    return PostFacade.likePost(args.post, authenticatedUser._id);
 }
 
-export async function unlikePost(args: GraphMutationLikePostArgs, request: Request): Promise<GraphPost> {
+export async function unlikePost(args: GraphMutationLikePostArgs, request: Request) {
 
     const authenticatedUser = await authentication(request);
-    const found = await PostModel.findOneAndUpdate({_id: args.identifier}, {$pull: {likedBy: authenticatedUser._id}}, {new: true}).exec();
-    if (!found)
-        throw new Error("No post with the provided identifier exists.");
 
-    return convertOne(found);
+    return PostFacade.unlikePost(args.post, authenticatedUser._id);
 }

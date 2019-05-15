@@ -4,8 +4,6 @@ documents: null
 config:
   typesPrefix: "Graph"
 generates:
-  src/generated/graphql.ts:
+  src/controllers/facades/graphql.ts:
     plugins:
       - "typescript"
-      - "typescript-resolvers"
-      - "typescript-mongodb"

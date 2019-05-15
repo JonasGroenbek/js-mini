@@ -1,9 +1,12 @@
 import {SafeString} from "handlebars";
 
-export function handlebarsPositionHelper(position: number[]) {
-    const longitude = position[0];
-    const latitude = position[1];
+type Position = {
+    longitude: number;
+    latitude: number
+};
+
+export function handlebarsPositionHelper(position: Position) {
+    const {longitude, latitude} = position;
     const href = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
-    return new SafeString(`<a target="_blank" href="${href}">${latitude} ${longitude}</a>`
-    );
+    return new SafeString(`<a target="_blank" href="${href}">${latitude} ${longitude}</a>`);
 }

@@ -64,8 +64,8 @@ type Query {
 
 type Mutation {
     createPost(input: PostInput!): Post!
-    deletePost(identifier: ID!): Post
-    likePost(identifier: ID!): Post
-    unlikePost(identifier: ID!): Post
+    deletePost(post: ID!): Post
+    likePost(post: ID!): Post
+    unlikePost(post: ID!): Post
 }
 `);
