@@ -1,5 +1,5 @@
 import {getUsers, getUserById} from "./resolvers/users";
-import {getPosts, getPostById, createPost, deletePost} from "./resolvers/posts";
+import {getPosts, getPostById, createPost, deletePost, likePost, unlikePost} from "./resolvers/posts";
 
 export default {
     getUsers,
@@ -7,5 +7,7 @@ export default {
     getPosts,
     getPostById,
     createPost,
-    deletePost
+    deletePost,
+    likePost,
+    unlikePost
 };

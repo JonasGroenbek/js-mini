@@ -15,7 +15,9 @@ export type GraphAdditionalEntityFields = {
 
 export type GraphMutation = {
   createPost: GraphPost;
-  deletePost: GraphPost;
+  deletePost?: Maybe<GraphPost>;
+  likePost?: Maybe<GraphPost>;
+  unlikePost?: Maybe<GraphPost>;
 };
 
 export type GraphMutationCreatePostArgs = {
@@ -23,6 +25,14 @@ export type GraphMutationCreatePostArgs = {
 };
 
 export type GraphMutationDeletePostArgs = {
+  identifier: Scalars["ID"];
+};
+
+export type GraphMutationLikePostArgs = {
+  identifier: Scalars["ID"];
+};
+
+export type GraphMutationUnlikePostArgs = {
   identifier: Scalars["ID"];
 };
 
@@ -260,10 +270,22 @@ export type GraphMutationResolvers<
     GraphMutationCreatePostArgs
   >;
   deletePost?: Resolver<
-    GraphResolversTypes["Post"],
+    Maybe<GraphResolversTypes["Post"]>,
     ParentType,
     ContextType,
     GraphMutationDeletePostArgs
+  >;
+  likePost?: Resolver<
+    Maybe<GraphResolversTypes["Post"]>,
+    ParentType,
+    ContextType,
+    GraphMutationLikePostArgs
+  >;
+  unlikePost?: Resolver<
+    Maybe<GraphResolversTypes["Post"]>,
+    ParentType,
+    ContextType,
+    GraphMutationUnlikePostArgs
   >;
 };
 

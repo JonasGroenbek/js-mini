@@ -1,5 +1,6 @@
-import mongoose, {Schema, Document} from "mongoose";
+import mongoose, {Schema, Document, Types} from "mongoose";
 import {User} from "./User";
+import ObjectId = Types.ObjectId;
 
 export const PostSchema = new Schema({
     content: {type: String, required: true},
@@ -20,8 +21,8 @@ export interface Post extends Document {
     title: string;
     content: string;
     images: string[];
-    author: User;
-    likedBy: [User];
+    author: ObjectId;
+    likedBy: ObjectId[];
     position: number[];
     created: Date;
 
@@ -31,23 +32,3 @@ export interface Post extends Document {
 const Model = mongoose.model<Post>("Post", PostSchema);
 
 export default Model;
-
-export async function getPosts() {
-
-    const results = await Model.aggregate([{
-        $lookup: {
-            from: "users",
-            localField: "author",
-            foreignField: "_id",
-            as: "author"
-        }
-    },
-    ])
-        .sort({created: -1})
-        .exec();
-
-    return results.map((post: any) => {
-        post.author = post.author[0];
-        return post;
-    });
-}
