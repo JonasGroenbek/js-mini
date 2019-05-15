@@ -39,6 +39,7 @@ export type GraphMutationUpdateOwnPositionArgs = {
 
 export type GraphPost = {
   identifier: Scalars["ID"];
+  title: Scalars["String"];
   content: Scalars["String"];
   images: Array<Scalars["String"]>;
   position: GraphPostPosition;

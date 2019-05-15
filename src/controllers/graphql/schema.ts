@@ -21,6 +21,7 @@ input PostInput {
 
 type Post {
     identifier: ID!
+    title: String!
     content: String!
     images: [String!]!
     position: PostPosition!
