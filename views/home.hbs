@@ -16,34 +16,21 @@
             <div class="content text">
                 {{markdown this.content}}
             </div>
-
             {{#if this.images.length }}
-                <!-- Slider main container -->
                 <div class="swiper-container" style="margin-top: 20px">
-                    <!-- Additional required wrapper -->
                     <div class="swiper-wrapper">
-                        <!-- Slides -->
-
                         {{#each this.images}}
                             <div class="swiper-slide" style="text-align: center">
                                 <img alt="location image" style="max-width: 100%" src="{{{this}}}"/>
                             </div>
-
                         {{/each}}
-                        ...
                     </div>
-
-                    <!-- If we need navigation buttons -->
                     <div class="swiper-button-prev"></div>
                     <div class="swiper-button-next"></div>
-
                 </div>
                 <script>
                     var mySwiper = new Swiper('.swiper-container', {
-                        // Optional parameters
                         direction: 'vertical',
-
-                        // Navigation arrows
                         navigation: {
                             nextEl: '.swiper-button-next',
                             prevEl: '.swiper-button-prev',
