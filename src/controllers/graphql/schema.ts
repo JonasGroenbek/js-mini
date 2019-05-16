@@ -24,9 +24,11 @@ type Post {
     title: String!
     content: String!
     images: [String!]!
+    imagesCount: Int!
     position: PostPosition!
     author: User!
     likedBy: [User!]!
+    likedByCount: Int!
     created: String!
 }
 

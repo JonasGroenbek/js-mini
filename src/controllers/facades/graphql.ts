@@ -42,9 +42,11 @@ export type GraphPost = {
   title: Scalars["String"];
   content: Scalars["String"];
   images: Array<Scalars["String"]>;
+  imagesCount: Scalars["Int"];
   position: GraphPostPosition;
   author: GraphUser;
   likedBy: Array<GraphUser>;
+  likedByCount: Scalars["Int"];
   created: Scalars["String"];
 };
 

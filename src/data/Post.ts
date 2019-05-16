@@ -5,7 +5,7 @@ import ObjectId = Types.ObjectId;
 export const PostSchema = new Schema({
     content: {type: String, required: true},
     title: {type: Schema.Types.String, required: true},
-    images: [String],
+    images: [Schema.Types.String],
     author: {type: Schema.Types.ObjectId, ref: "User", required: true},
     position: {type: [Schema.Types.Number], index: "2dsphere"},
     likedBy: [{type: Schema.Types.ObjectId, ref: "User"}],
@@ -13,8 +13,11 @@ export const PostSchema = new Schema({
 }, {collection: "blogposts"});
 
 PostSchema.virtual("likedByCount", function () {
-    // @ts-ignore
     return this.likedBy.length;
+});
+
+PostSchema.virtual("imagesCount", function () {
+    return this.images.length;
 });
 
 export interface Post extends Document {

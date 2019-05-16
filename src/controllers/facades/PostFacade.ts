@@ -79,16 +79,22 @@ export async function convertMany(posts: Post[]): Promise<GraphPost[]> {
         return acc;
     }, {});
 
-    return posts.map(post => (
-        {
+    return posts.map(post => {
+
+        const likes = post.likedBy.map(userId => userConverter(retrievedUsers[userId.toHexString()]));
+
+        return {
             ...post,
             identifier: post._id,
             position: {
                 longitude: post.position[0],
                 latitude: post.position[1]
             },
-            likedBy: post.likedBy.map(userId => userConverter(retrievedUsers[userId.toHexString()])),
+            likedBy: likes,
+            likedByCount: likes.length,
+            imagesCount: post.images.length,
             author: userConverter(retrievedUsers[post.author.toHexString()]),
             created: post.created.toDateString()
-        }));
+        };
+    });
 }
