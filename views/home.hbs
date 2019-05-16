@@ -5,7 +5,7 @@
         <p>Sorry, there are currently no posts.</p>
     {{/unless}}
     {{#each posts as |post|}}
-        <div class="row">
+        <div id="{{post.identifier}}" class="row">
         <div class="col s12 post panel pad">
             <h3 class="title">{{post.title}}</h3>
             <div class="details" style="margin-bottom: 20px">
