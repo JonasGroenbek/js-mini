@@ -1,9 +1,8 @@
 import FrameworkValidator, {
     ValidationError as FrameworkValidationError,
-    ValidationRule as FrameworkValidationRule,
     ValidationSchema as FrameworkValidationSchema,
 } from "fastest-validator";
-import {ApplicationErrorBase} from "./error";
+import {ApplicationError} from "./error";
 
 export class Validator extends FrameworkValidator {
     validateOrThrow(object: any, schema: FrameworkValidationSchema) {
@@ -26,7 +25,7 @@ export class Validator extends FrameworkValidator {
     }
 }
 
-export class ValidationError extends ApplicationErrorBase {
+export class ValidationError extends ApplicationError {
 
     public readonly publics = ["name", "text", "status", "validationErrors"];
     public readonly validationErrors: FrameworkValidationError[];

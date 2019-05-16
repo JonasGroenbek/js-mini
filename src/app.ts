@@ -13,6 +13,7 @@ import {handlebarsErrorHandler} from "./util/formErrors";
 import {messengerRenderer} from "./util/messenger";
 import {handlebarsMarkdown} from "./util/markdown";
 import {handlebarsPositionHelper} from "./util/handlebarsPositionHelper";
+import ifIn from "./util/ifIn";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.engine("hbs", hbs({
         formErrors: handlebarsErrorHandler,
         markdown: handlebarsMarkdown,
         position: handlebarsPositionHelper,
+        ifIn: ifIn,
         messengerRenderer
     }
 }));

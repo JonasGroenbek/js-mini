@@ -12,17 +12,17 @@ router.use(bodyParser.urlencoded({extended: true}));
 
 // Renders the registration page.
 // @ts-ignore
-router.get("/", async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
+router.get("/", async function (req: Request, res: Response, next: (err: Error) => any) {
     await attempt(next, function () {
         res.render("register", {
             formErrors: sessionFormErrors(req).getErrors()
-        });
+        }, next);
     });
 });
 
 // Accepts form information sent by the registration page.
 // @ts-ignore
-router.post("/", async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
+router.post("/", async function (req: Request, res: Response, next: (err: Error) => any) {
 
     const errors = sessionFormErrors(req);
     const {firstName, lastName, email, password, repeatPassword} = req.body;

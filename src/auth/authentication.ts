@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import AuthenticatableUser from "./AuthenticatableUser";
-import {ApplicationError, ApplicationErrorBase} from "../errors/error";
+import {ApplicationError} from "../errors/error";
 import {StackFrame} from "stack-trace";
 
 export interface AuthenticationRepository<T extends AuthenticatableUser> {
@@ -106,7 +106,7 @@ export default class BcryptAuthenticationProvider<T extends AuthenticatableUser>
 /**
  * The most general exception thrown on authentication errors.
  */
-export class AuthenticationError extends ApplicationErrorBase {
+export class AuthenticationError extends ApplicationError {
 
     constructor(name: string,
                 message: string,
@@ -120,7 +120,7 @@ export class AuthenticationError extends ApplicationErrorBase {
 /**
  * Thrown when two users has the same identifier, when creating a new user account.
  */
-export class DuplicateUserIdentifier extends ApplicationErrorBase {
+export class DuplicateUserIdentifier extends ApplicationError {
 
     constructor(identifier: string) {
         super("DuplicateUserIdentifier", `Duplicate identifier ${identifier}.`, 402, undefined, undefined);
