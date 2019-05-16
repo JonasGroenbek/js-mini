@@ -60,6 +60,7 @@ type User {
 
 type Query {
     getPosts: [Post]
+    getPostImages(post: ID!): [String!]
     getPostById(identifier: ID!): Post
     getUsers: [User]
     getUserById(identifier: ID!): User
