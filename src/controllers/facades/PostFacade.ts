@@ -93,6 +93,8 @@ export default class PostFacade {
                     latitude: post.position[1]
                 },
                 likedBy,
+                likedByCount: likedBy.length,
+                imagesCount: post.images.length,
                 author: await UserFacade.convertOne(retrievedUsers[post.author.toHexString()]),
                 created: post.created.toDateString()
             });

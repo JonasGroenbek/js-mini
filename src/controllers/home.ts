@@ -7,10 +7,10 @@ import PostFacade from "./facades/PostFacade";
 // Renders the home page.
 export default async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
     await attempt(next, async function () {
-        res.render("home", {
-            authenticatedUser: sessionAuthentication(req).getAuthenticatedUser(),
-            messenger: sessionMessenger(req),
-            posts: await PostFacade.getPosts()
-        });
+            res.render("home", {
+                authenticatedUser: sessionAuthentication(req).getAuthenticatedUser(),
+                messenger: sessionMessenger(req),
+                posts: await PostFacade.getPosts(),
+            });
     });
 }

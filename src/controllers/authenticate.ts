@@ -12,7 +12,8 @@ const router = express.Router();
 router.use(bodyParser.urlencoded({extended: true}));
 
 // Renders the authentication page.
-router.get("/", async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
+router.get("/", async function (req: Request, res: Response, next: (err: Error) => any) {
+
     await attempt(next, function () {
         res.render("authenticate", {
             formErrors: sessionFormErrors(req).getErrors(),
@@ -22,9 +23,9 @@ router.get("/", async function (req: Request, res: Response, next: (err: Applica
 });
 
 // Accepts form information sent by the authentication page.
-router.post("/", async function (req: Request, res: Response, next: (err: ApplicationError) => any) {
-    await attempt(next, async function () {
+router.post("/", async function (req: Request, res: Response, next: (err: Error) => any) {
 
+    await attempt(next, async function () {
         const errors = sessionFormErrors(req);
         try {
             const result = await authenticationProvider.authenticate(req.body.email, req.body.password);

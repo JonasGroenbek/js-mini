@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {ApplicationError, ApplicationErrorBase} from "../errors/error";
+import {ApplicationError} from "../errors/error";
 import _ from "lodash";
 import AuthenticatableUser from "./AuthenticatableUser";
 import {JsonWebTokenService} from "./jsonWebToken";
@@ -86,7 +86,7 @@ export class JwtAuthorizationProvider<T extends AuthenticatableUser> implements 
     }
 }
 
-export class AuthorizationError extends ApplicationErrorBase {
+export class AuthorizationError extends ApplicationError {
     constructor(message: string, cause?: undefined) {
         super("AuthorizationError", message, 403, cause, undefined);
     }

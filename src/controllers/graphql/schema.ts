@@ -24,9 +24,11 @@ type Post {
     title: String!
     content: String!
     images: [String!]!
+    imagesCount: Int!
     position: PostPosition!
     author: User!
     likedBy: [User!]!
+    likedByCount: Int!
     created: String!
 }
 
@@ -58,6 +60,7 @@ type User {
 
 type Query {
     getPosts: [Post]
+    getPostImages(post: ID!): [String!]
     getPostById(identifier: ID!): Post
     getUsers: [User]
     getUserById(identifier: ID!): User

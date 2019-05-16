@@ -1,21 +1,13 @@
 import stacktrace, {StackFrame} from "stack-trace";
 import getPrototypeOf = Reflect.getPrototypeOf;
 
-export interface ApplicationError {
-    readonly name: string;
-    readonly message: string;
-    readonly status: number;
-    readonly cause: Error | ApplicationError;
-    readonly publics: string[];
-    readonly stack?: StackFrame[];
-}
+export class ApplicationError implements Error {
 
-export class ApplicationErrorBase implements ApplicationError {
     readonly name: string;
     readonly message: string;
     readonly status: number;
     readonly cause: Error | ApplicationError;
-    readonly stack?: StackFrame[];
+    readonly stacktrace?: StackFrame[];
     readonly publics = ["name", "message", "status"];
 
     constructor(name: string,
@@ -26,7 +18,7 @@ export class ApplicationErrorBase implements ApplicationError {
         this.name = name;
         this.cause = cause;
         this.message = message;
-        this.stack = stack;
+        this.stacktrace = stack;
         this.status = status;
     }
 }
@@ -84,7 +76,7 @@ export class Builder {
         return this;
     }
 
-    build(constructable: ConstructableApplicationError = ApplicationErrorBase): ApplicationError {
+    build(constructable: ConstructableApplicationError = ApplicationError): ApplicationError {
         if (this._name == undefined)
             this._name = constructable.prototype.name;
 
@@ -96,14 +88,14 @@ export async function attempt(next: (err: ApplicationError) => any, perform: () 
     try {
         return await perform();
     } catch (e) {
-        if (e instanceof ApplicationErrorBase)
+        if (e instanceof ApplicationError)
             return next(e);
         if (e instanceof Error)
-            return next(new ApplicationErrorBase("GeneralError", e.message, 500, e, stacktrace.parse(e)));
+            return next(new ApplicationError("GeneralError", e.message, 500, e, stacktrace.parse(e)));
         if (typeof e === "string")
-            return next(new ApplicationErrorBase("GeneralError", e, 500, undefined, undefined));
+            return next(new ApplicationError("GeneralError", e, 500, undefined, undefined));
 
-        return new ApplicationErrorBase("ErrorHandlerError", "Could not handle error.", 500, undefined, undefined);
+        return new ApplicationError("ErrorHandlerError", "Could not handle error.", 500, undefined, undefined);
     }
 }
 

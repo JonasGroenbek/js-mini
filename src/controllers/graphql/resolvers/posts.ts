@@ -6,11 +6,19 @@ import {
     GraphMutationCreatePostArgs,
     GraphQueryGetPostByIdArgs,
     GraphMutationDeletePostArgs,
-    GraphMutationLikePostArgs
+    GraphMutationLikePostArgs, GraphQueryGetPostImagesArgs
 } from "../../facades/graphql";
 
 export async function getPosts(): Promise<GraphPost[]> {
     return PostFacade.getPosts();
+}
+
+export async function getPostImages(args: GraphQueryGetPostImagesArgs) {
+    const post = await PostFacade.getPostById(args.post);
+    if (!post)
+        return undefined;
+
+    return post.images;
 }
 
 export async function getPostById(args: GraphQueryGetPostByIdArgs) {
