@@ -5,7 +5,6 @@ import {JsonWebTokenService} from "./jsonWebToken";
 import {ApplicationError, attempt} from "../errors/error";
 import validator from "../errors/validation";
 import {UserValidationSchema} from "../data/User";
-import {converter} from "../controllers/facades/UserFacade";
 
 export type RestAuthenticationOptions<T extends AuthenticatableUser> = {
     identifierKey?: string,
