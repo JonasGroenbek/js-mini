@@ -108,3 +108,13 @@ export default function error(message?: string, status: number = 400): Builder {
 
     return builder;
 }
+
+export function errorToObject(err: any) {
+    return {
+        name: err.name,
+        message: err.message,
+        status: err.status,
+        cause: err.cause,
+        stack: err.stack,
+    };
+}

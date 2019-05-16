@@ -1,5 +1,5 @@
 import config from "./util/secrets";
-import "./util/logger";
+import logger from "./util/logger";
 import express from "express";
 import compression from "compression";
 import bodyParser from "body-parser";
@@ -11,7 +11,7 @@ import router from "./controllers/router";
 import session from "express-session";
 import {handlebarsErrorHandler} from "./util/formErrors";
 import {messengerRenderer} from "./util/messenger";
-import ifIn, {markdownRenderer, positionGoogleMapsLink} from "./util/handlebars";
+import {handlebarsHelperLogger, ifIn, markdownRenderer, positionGoogleMapsLink} from "./util/handlebars";
 
 const app = express();
 
@@ -23,11 +23,11 @@ app.engine("hbs", hbs({
     layoutsDir: path.join(__dirname + "/../views/layouts"),
     partialsDir: path.join(__dirname + "/../views/partials"),
     helpers: {
-        formErrors: handlebarsErrorHandler,
-        positionGoogleMapsLink,
-        markdownRenderer,
-        messengerRenderer,
-        ifIn,
+        formErrors: handlebarsHelperLogger(handlebarsErrorHandler, logger),
+        positionGoogleMapsLink: handlebarsHelperLogger(positionGoogleMapsLink, logger),
+        markdownRenderer: handlebarsHelperLogger(markdownRenderer, logger),
+        messengerRenderer: handlebarsHelperLogger(messengerRenderer, logger),
+        ifIn: handlebarsHelperLogger(ifIn, logger),
     }
 }));
 
