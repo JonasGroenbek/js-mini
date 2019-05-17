@@ -20,6 +20,8 @@ export const UserPositionSchema = new Schema({
     }
 });
 
+UserPositionSchema.index({ position: "2dsphere" });
+
 export interface UserPosition extends Document {
     user: ObjectId;
     created: Date;
